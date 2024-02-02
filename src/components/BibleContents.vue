@@ -1,7 +1,10 @@
 <script setup>
 import YAML from 'yaml'
 import { ref, reactive } from 'vue'
+import { ChevronDownIcon } from '@heroicons/vue/24/solid'
 
+const data_url = "https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/75d6e6a338e44ab13162fce7a367874c10b37ce3/example_data.yaml"
+const showVerseNumber = ref(false)
 const bodydata = reactive({
     raw_data: [],
     book_data: {
@@ -38,7 +41,7 @@ function delay() {
 async function getBibledata() {
     try {
         //let data = YAML.parse(await (await (await fetch('./data/list-bible.yaml')).blob()).text())
-        let data = YAML.parse(await (await (await fetch('./data/list-bible.yaml')).blob()).text())
+        let data = YAML.parse(await (await (await fetch(data_url)).blob()).text())
         console.log(data)
 
         bodydata.raw_data = data
@@ -131,68 +134,72 @@ window.onclick = function (event) {
     }
 }
 
+function toogleVerseNumber() {
+    showVerseNumber.value = !showVerseNumber.value
+}
 </script>
 
 <template>
-    <div>
-        <table>
-            <thead>
-                <tr>
-                    <td>
-                        <h1>Book Version: <button @click="listBooks" class="dropbtn">{{ bodydata.book_data.book_name
-                        }}</button></h1>
-                        <div id="listBooks" class="dropdown-content">
-                            <button v-for="(item, index) in bodydata.raw_data.book_list" @click="changeBook(index)">
-                                {{ item.name }}
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h1>Part: {{ bodydata.book_data.part_name }}</h1>
-                    </td>
-                </tr>
-                <tr>
-                    <th>
-                        <h3>
-                            <button @click="listScripts" class="dropbtn">{{ bodydata.book_data.script_name }}</button>
-                            <div id="listScripts" class="dropdown-content">
-                                <button v-for="(item, index) in bodydata.book_data.script_list"
-                                    @click="changeScript(index)">
-                                    {{ item }}
-                                </button>
-                            </div>
-                            :
-                            <button @click="listChapters" class="dropbtn">{{ bodydata.book_data.chapter }}</button>
-                            <div id="listChapters" class="dropdown-content">
+    <table class="w-full md:max-w-[1000px] mx-auto py-auto text-left text-sm font-light">
+        <thead class="border-b text-center font-medium dark:border-neutral-500">
+            <tr>
+                <th scope="col" class="px-6 py-4">
+                    <h1>Book Version:
+                        <button @click="listBooks" class="dropbtn">
+                            {{ bodydata.book_data.book_name }}
+                        </button>
+                    </h1>
+                    <div id="listBooks" class="dropdown-content">
+                        <button v-for="(item, index) in bodydata.raw_data.book_list" @click="changeBook(index)">
+                            {{ item.name }}
+                        </button>
+                    </div>
+                </th>
+            </tr>
+            <tr>
+                <th scope="col" class="px-6 py-1">
+                    <h1>Part: {{ bodydata.book_data.part_name }}</h1>
+                </th>
+            </tr>
+            <tr>
+                <th colspan="2" scope="col" class="px-6 py-4">
+                    <button @click="listScripts" class="dropbtn">
+                        {{ bodydata.book_data.script_name }}
+                    </button>
+                    <div id="listScripts" class="dropdown-content">
+                        <button v-for="(item, index) in bodydata.book_data.script_list" @click="changeScript(index)">
+                            {{ item }}
+                        </button>
+                    </div>
+                    &nbsp;
+                    <button @click="listChapters" class="dropbtn">
+                        {{ bodydata.book_data.chapter }}
+                    </button>
+                    <div id="listChapters" class="dropdown-content">
+                        <button v-for="(item, index) in bodydata.book_data.chapter_list" @click="changeChapter(index)">
+                            {{ item }}
+                        </button>
+                    </div>
 
-                                <button v-for="(item, index) in bodydata.book_data.chapter_list"
-                                    @click="changeChapter(index)">
-                                    {{ item }}
-                                </button>
-                            </div>
-                        </h3>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <a v-for="(item, index) in bodydata.book_data.verse_list">{{ item }}</a>
-                        <!--div v-for="(item, index) in bodydata.book_data.verses">
-                            {{ index + 1 }}. {{ item.text }}
-                        </div-->
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <hr>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan=2 class="px-6 py-4 overflow-hidden">
+                    <a v-if="showVerseNumber" v-for="(item, index) in bodydata.book_data.verse_list" class="">{{ item }}</a>
+                    <p v-else v-for="(item, index) in bodydata.book_data.verse_list">
+                        {{ index + 1 }}. {{ item }}
+                    </p>
+                </td>
+            </tr>
+            <tr class="border-b dark:border-neutral-500 px-6 py-4">
+                <td colspan="2">
+                    <button @click="toogleVerseNumber">Show verse number</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </template>
 
 <style scoped>
