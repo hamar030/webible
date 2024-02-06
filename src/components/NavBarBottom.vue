@@ -21,7 +21,7 @@
                 <p class="mb-4">
                     Create by Love, for you and for the glory of YAH.
                 </p>
-                
+
             </div>
         </div>
     </div>
@@ -29,7 +29,9 @@
     <!--Copyright section-->
     <div class="w-full bg-neutral-200 p-4 text-center text-neutral-700 dark:bg-neutral-700 dark:text-neutral-200">
         © 2024 No Copyright:
-        <a class="text-neutral-800 dark:text-neutral-400" href="https://webible.com/">WeBible</a>
+        <a class="text-neutral-800 dark:text-neutral-400" href="https://webible.netlify.app/">WeBible</a>
+        | Hosted by: <a class="text-neutral-800 dark:text-neutral-400" href="https://netlify.com/">Netlify</a>
+        
     </div>
 </template>
 
