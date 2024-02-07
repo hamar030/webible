@@ -6,7 +6,7 @@
     <div class="container p-6 text-neutral-800 dark:text-neutral-200">
         <div class="grid gap-4 lg:grid-cols-2">
             <div class="mb-6 md:mb-0">
-                <h5 class="mb-2 font-medium uppercase">Just Note:</h5>
+                <h5 class="mb-2 font-medium uppercase">just note:</h5>
 
                 <p class="mb-4">
                     Remember reading bible from torah scroll or bible book is more better than this.
@@ -15,11 +15,10 @@
             </div>
 
             <div class="mb-6 md:mb-0">
-
-                <h5 class="mb-2 font-medium uppercase">Msg</h5>
+                <h5 class="mb-2 font-medium uppercase">another message:</h5>
 
                 <p class="mb-4">
-                    Create by Love, for you and for the glory of YAH.
+                    Create by Love, for you and for the glory of YAHWEH .
                 </p>
 
             </div>
@@ -31,7 +30,6 @@
         © 2024 No Copyright:
         <a class="text-neutral-800 dark:text-neutral-400" href="https://webible.netlify.app/">WeBible</a>
         | Hosted by: <a class="text-neutral-800 dark:text-neutral-400" href="https://netlify.com/">Netlify</a>
-        
     </div>
 </template>
 
