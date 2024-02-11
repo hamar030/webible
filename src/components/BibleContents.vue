@@ -32,7 +32,7 @@ import 'swiper/css/virtual'
 //const data_url = "/data/example_data.yaml"
 /* bible list data url */
 //const data_url = "https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list-bible.yaml"
-const data_url = "https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/id-iltt3.yaml"
+const data_url = "https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/id-ilt3.yaml"
 //const data_url = '/data/id-ilt3.yaml'
 //const data_url = '/data/he-mhb.yaml'
 //const data_url = "/data/list-bible.yaml"
