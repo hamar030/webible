@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        /* ... */
-    }
+  :root {
+    /* ... */
+  }
+  html {
+    @apply h-full w-full bg-white dark:bg-neutral-950;
+  }
+  body {
+    @apply h-full w-full;
+  }
 }
