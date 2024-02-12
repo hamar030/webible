@@ -1,12 +1,21 @@
 <script setup>
-import { onMounted, ref } from 'vue'
-import App from './App.vue'
+import { onMounted, ref, createApp } from 'vue'
+import {Book} from '@/lib/book'
+
+const data_url = '/data/id-ilt3.yaml'
+//const data_url = "/data/list-bible.yaml"
+
+
 
 let msg = ref('Hello Code')
 onMounted(() => {
-  document.getElementById('appContents').append(msg.value)
+  const book = Book.initialize(data_url)
 })
 </script>
 <template>
-  <App />
+    <article>
+      <p>
+        {{book}}
+      </p>
+    </article>
 </template>

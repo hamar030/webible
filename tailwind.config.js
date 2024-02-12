@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors')
 
@@ -7,8 +8,14 @@ export default {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      display: ['Heebo', '"Nunito Sans"', '"Noto Sans"', 'system-ui', 'sans-serif'],
-      body: ['"Roboto","Nunito"', '"Noto Sans"', 'system-ui', 'sans-serif']
+      display: [
+        'Heebo Variable',
+        '"Nunito Sans Variable"',
+        '"Noto Sans"',
+        'system-ui',
+        'sans-serif'
+      ],
+      body: ['Roboto', '"Nunito Variable"', '"Noto Sans"', 'system-ui', 'sans-serif']
     },
     extend: {
       colors: {

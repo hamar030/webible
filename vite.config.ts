@@ -7,15 +7,16 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), eslintPlugin()],
+  plugins: [vue(), ],
   resolve: {
     alias: {
       // eslint-disable-next-line no-undef
-      '@': path.resolve(__dirname, '/src')
+      '@': path.resolve(__dirname, '/src'),
+      vue: 'vue/dist/vue.esm-bundler.js',
     }
   },
   server: {
-    open: true,
+    open: false,
     proxy: {
       '/api': {
         target: 'http://localhost:5173/.netlify/functions',

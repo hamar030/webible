@@ -1,8 +1,7 @@
 @import './base.css';
-@import url('https://fonts.cdnfonts.com/css/noto-sans');
-@import url('https://fonts.cdnfonts.com/css/nunito-sans');
-@import url('https://fonts.cdnfonts.com/css/nunito');
-@import url('https://fonts.cdnfonts.com/css/heebo');
+@import '@fontsource-variable/heebo';
+@import '@fontsource-variable/nunito';
+@import '@fontsource-variable/nunito-sans';
 
 body {
 }

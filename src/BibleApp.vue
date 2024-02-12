@@ -1,12 +1,11 @@
 <script setup>
-import { createApp, onMounted } from 'vue'
-import App from './App.vue'
+import { onMounted } from 'vue'
 import BibleContents from './components/BibleContents.vue'
 
 onMounted(() => {
-  createApp(BibleContents).mount('#appContents')
+
 })
 </script>
 <template>
-  <App />
+  <BibleContents />
 </template>

@@ -6,10 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#dbeafe" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#872e4e" media="(prefers-color-scheme: dark)" />
-    <title>WeBible</title>
+    <script type="module" src="/src/main.tsx" lang="ts"></script>
   </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+  <body id="app">
+    <router-view></router-view>
   </body>
 </html>
