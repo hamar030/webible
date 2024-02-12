@@ -14,7 +14,7 @@ const About = {template: "About\n <a href></a>"}
 const routes = [
   { path: '/', component: App,
     children: [
-      { path: '', component: Main },
+      { path: '', redirect: '/bible' },
       { path: '/bible', component: BibleApp },
       { path: '/bible-code', component: BibleCodeApp },
       { path: '/about', component: About },
