@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, createApp } from 'vue'
 import {Book} from '@/lib/book'
 

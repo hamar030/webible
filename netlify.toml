@@ -10,7 +10,7 @@ status = 200
 to = '/index.html'
 
 [build]
-command = 'npm run build'
+command = 'vue-tsc && vite build'
 environment = {NODE_VERSION = '20'}
 publish = 'dist'
 

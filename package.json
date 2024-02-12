@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "ntl dev",
-    "build": "vue-tsc && vite build",
+    "build": "ntl build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
