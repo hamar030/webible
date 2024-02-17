@@ -7,7 +7,7 @@ import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), ],
+  plugins: [vue() ,eslintPlugin()],
   resolve: {
     alias: {
       // eslint-disable-next-line no-undef

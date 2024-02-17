@@ -1,21 +1,11 @@
 <script setup lang="ts">
-import { onMounted, ref, createApp } from 'vue'
-import {Book} from '@/lib/book'
+import { onMounted, ref } from 'vue'
 
-const data_url = '/data/id-ilt3.yaml'
-//const data_url = "/data/list-bible.yaml"
-
-
-
-let msg = ref('Hello Code')
-onMounted(() => {
-  const book = Book.initialize(data_url)
-})
+const msg = ref('Hello Code...')
+onMounted(async () => {})
 </script>
 <template>
-    <article>
-      <p>
-        {{book}}
-      </p>
-    </article>
+  <article>
+    <p>{{ msg }}</p>
+  </article>
 </template>

@@ -7,9 +7,12 @@
     /* ... */
   }
   html {
-    @apply h-full w-full bg-white dark:bg-neutral-950;
+    @apply h-full w-full bg-white font-body dark:bg-neutral-950;
+  }
+  html.dark {
+    @apply bg-neutral-950;
   }
   body {
-    @apply h-full w-full;
+    /* @apply h-full w-full */
   }
 }
