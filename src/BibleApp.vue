@@ -152,6 +152,7 @@ function nextCurrentChapter() {
       selected.value.Script++
     } else {
       if (selected.value.Part + 1 < currentBook.value.Parts.length) {
+        selected.value.Chapter = 0
         selected.value.Script = 0
         selected.value.Part++
       }
@@ -209,9 +210,6 @@ onMounted(async () => {
   watch(config.value, (val) => {
     localStorage.setItem('config', JSON.stringify(val))
   })
-
-  // console.log(currentBook.value.Name)
-  // console.log(listBook.value)
 })
 </script>
 <template>

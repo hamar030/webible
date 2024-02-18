@@ -6,6 +6,7 @@ import { SunIcon as SunSolid } from '@heroicons/vue/24/solid'
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
 
 const APP_NAME = 'WeBible'
+const APP_HEADER = 'For the Glory of YAHWEH'
 const currentTheme = ref(
   localStorage.getItem('webibleTheme') === null ? 'system' : localStorage.getItem('webibleTheme')
 )
@@ -93,7 +94,7 @@ if (
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <img class="sr-only h-8 w-8" src="/src/assets/logo.svg" alt="Your Company" />
+                <!-- logo -->
                 <img
                   width="50"
                   height="50"
@@ -102,10 +103,12 @@ if (
                 />
               </div>
               <div class="md:hidden">
+                <!-- App Name Mobile -->
                 <h1 class="ml-5 text-3xl font-bold tracking-tight text-slate-800 dark:text-white">
                   {{ APP_NAME }}
                 </h1>
               </div>
+              <!-- Link -->
               <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
                   <component
@@ -148,7 +151,7 @@ if (
                 </button>
 
                 <!-- Profile dropdown -->
-                <Menu as="div" class="sr-only relative ml-3">
+                <Menu as="div" class="sr-only relative ml-3 hidden">
                   <div>
                     <MenuButton
                       class="relative flex max-w-xs items-center rounded-full bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
@@ -209,6 +212,12 @@ if (
         </div>
 
         <DisclosurePanel class="md:hidden">
+          <div class="pb-3sm:px-3 space-y-1 px-5">
+            <h6 class="font-md tracking-tight">
+              <span class="inline-block">{{ APP_HEADER }}</span>
+            </h6>
+          </div>
+          <!-- link mobile -->
           <div class="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             <DisclosureButton
               v-for="item in navigation"
@@ -266,6 +275,9 @@ if (
       >
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 md:min-h-48 lg:px-8">
           <h1 class="font-display text-3xl font-bold tracking-tight">{{ APP_NAME }}</h1>
+          <h6 class="font-md tracking-tight">
+            <span class="inline-block">{{ APP_HEADER }}</span>
+          </h6>
         </div>
       </header>
     </router-view>
@@ -290,8 +302,6 @@ if (
           >
           |
           <span class="inline-block">Hosted by: <a href="https://netlify.com/">Netlify</a></span>
-          |
-          <span class="inline-block">For the Glory of YAHWEH</span>
         </div>
       </footer>
     </router-view>
