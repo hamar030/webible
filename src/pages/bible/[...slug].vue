@@ -35,7 +35,12 @@
         v-for="chapter in useBook.listChapter"
         :key="chapter?.id"
       >
-        <button v-if="chapter!=null" @click="selectChapter(chapter)">{{ chapter }}</button>
+        <button
+          v-if="chapter != null"
+          @click="selectChapter(chapter)"
+        >
+          {{ chapter }}
+        </button>
       </li>
     </ul>
     <hr />
@@ -61,8 +66,7 @@
 import { useNuxtApp } from '#imports'
 import { definePageMeta } from '#imports'
 import { useBookStore } from '#imports'
-import { ref, watch } from 'vue'
-import type { IBook, IPart, IScript, IChapter } from '@/stores/Books'
+import type { IBook, IScript, IChapter } from '@/stores/Books'
 definePageMeta({
   title: 'Webible - Bible',
   layout: 'reading'
@@ -91,7 +95,7 @@ const selectBook = async (book: Omit<IBook, 'parts'>) => {
   useBook.set_listScripts(scripts)
   useBook.set_listChapters(chapters)
   useBook.selectScript(scripts[0].scripts[0])
-  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'> )
+  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'>)
 }
 const selectScript = async (script: IScript) => {
   const chapters = await $client.bible.script.chapter.list.query({
@@ -99,7 +103,7 @@ const selectScript = async (script: IScript) => {
   })
   useBook.selectScript(script)
   useBook.set_listChapters(chapters)
-  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'> )
+  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'>)
 }
 const selectChapter = async (chapter: Omit<IChapter, 'verses'> | null) => {
   useBook.selectedChapter = chapter as Omit<IChapter, 'verses'>

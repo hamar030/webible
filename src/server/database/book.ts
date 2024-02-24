@@ -70,11 +70,11 @@ class Books implements IBooks {
     return this.list.map((book) => ({ ..._.omit(book, 'parts'), parts: [] }))
   }
 
-  public getBook(bookId: number):IBook | null {
-    return this.list.find((book) => book.id === bookId)??null
+  public getBook(bookId: number): IBook | null {
+    return this.list.find((book) => book.id === bookId) ?? null
   }
 
-  public listScript(bookId: number): IPart[]{
+  public listScript(bookId: number): IPart[] {
     const parts: IPart[] = []
     this.getBook(bookId)?.parts.forEach((part, pindex) => {
       parts[pindex] = { ..._.omit(part, 'scripts'), scripts: [] }
@@ -84,8 +84,15 @@ class Books implements IBooks {
     })
     return parts
   }
-  public listChapter(qscript: ({id: number,name: string})): (Omit<IChapter, "verses"> | null)[] {
-    return this.list.flatMap(book=>book.parts.flatMap( part=>part.scripts.find(script=>script.id===qscript.id && script.name===qscript.name)?.chapters.flatMap(chapter=>_.omit(chapter,'verses'))??null ))
+  public listChapter(qscript: { id: number; name: string }): (Omit<IChapter, 'verses'> | null)[] {
+    return this.list.flatMap((book) =>
+      book.parts.flatMap(
+        (part) =>
+          part.scripts
+            .find((script) => script.id === qscript.id && script.name === qscript.name)
+            ?.chapters.flatMap((chapter) => _.omit(chapter, 'verses')) ?? null
+      )
+    )
   }
 }
 
@@ -127,4 +134,4 @@ interface IVerse {
 }
 
 export { Books }
-export type { IBook, IPart, IScript , IChapter, IVerse}
+export type { IBook, IPart, IScript, IChapter, IVerse }

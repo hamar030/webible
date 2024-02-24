@@ -33,9 +33,13 @@ export const bibleRouter = router({
       )
       .query(({ input }) => books.value.listScript(input.bookId)),
     chapter: router({
-      list: publicProcedure.input(z.object({
-        script: z.object({id: z.number(),name: z.string()})
-      })).query(({input})=> books.value.listChapter(input.script))
+      list: publicProcedure
+        .input(
+          z.object({
+            script: z.object({ id: z.number(), name: z.string() })
+          })
+        )
+        .query(({ input }) => books.value.listChapter(input.script))
     })
   })
 })
