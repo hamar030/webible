@@ -1,13 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@tailwind variants;
 
 @layer base {
   :root {
     /* ... */
   }
   html {
-    @apply h-full w-full bg-white font-body dark:bg-neutral-950;
+    @apply h-full w-full bg-white font-body dark:bg-stone-900;
   }
   html.dark {
     @apply bg-neutral-950;

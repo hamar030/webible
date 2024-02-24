@@ -1,20 +1,11 @@
-[[redirects]]
-force = true
-from = '/api/*'
-status = 200
-to = '/.netlify/functions/:splat'
-
-[[redirects]]
-from = '/*'
-status = 200
-to = '/index.html'
-
 [build]
-command = 'vue-tsc && vite build'
-environment = {NODE_VERSION = '20'}
+command = 'nuxi build'
+environment = {NODE_VERSION = '20', SERVER_PRESET='netlify_edge'}
 publish = 'dist'
 
 [dev]
-  framework = "vite"
+  framework = "nuxt"
+  command= "nuxi dev"
+  environment = {SERVER_PRESET='netlify_edge'}
   autoLaunch = false
-  targetPort = 5173
+  targetPort = 3000
