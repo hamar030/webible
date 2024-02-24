@@ -6,5 +6,6 @@
   "printWidth": 100,
   "trailingComma": "none",
   "plugins": ["prettier-plugin-tailwindcss"],
+  "singleAttributePerLine": true,
   "tailwindFunctions": ["clsx"]
 }

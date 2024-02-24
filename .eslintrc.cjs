@@ -19,11 +19,11 @@ module.exports = {
       '<template>': 'espree'
     },
     ecmaVersion: 'latest',
-    ecmaFeatures:{
+    ecmaFeatures: {
       jsx: true
     }
   },
-  plugins: ['vue','@typescript-eslint'],
+  plugins: ['vue', '@typescript-eslint'],
   extends: [
     'plugin:vue/base',
     'eslint:recommended',
@@ -32,5 +32,6 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier'
-  ]
+  ],
+  rules: { 'vue/multi-word-component-names': 'off' }
 }
