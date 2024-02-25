@@ -1,7 +1,7 @@
 import YAML from 'yaml'
 
 // need to separate it with env
-//const LIST_BOOK_URL: string = '/data/list_book.yaml'
+// const LIST_BOOK_URL: string = '/data/list_book_local.yaml'
 const LIST_BOOK_URL: string = 'https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list_book.yaml'
 
 async function dataFetch(url: string) {
@@ -61,7 +61,7 @@ export class BookList implements IBookList {
   public static async initialize() {
     try {
       const list = await dataFetch(LIST_BOOK_URL).then((res) => {
-        return res.listBook
+        return res.books
       })
       const listBook: IBook[] = []
       for (const [index, book] of list.entries()) {
