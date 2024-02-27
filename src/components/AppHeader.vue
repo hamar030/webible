@@ -49,7 +49,6 @@
                 aria-hidden="true"
               />
             </button>
-
             <!-- Profile dropdown -->
             <Menu
               as="div"
@@ -99,7 +98,7 @@
           </div>
         </div>
         <div class="-mr-2 flex md:hidden">
-          <ChangeThemeButton class="link-color rounded-md p-2" />
+          <ChangeThemeButton class="link-color rounded-md p-2 mr-1" />
           <!-- Mobile menu button -->
           <DisclosureButton
             class="link-color relative inline-flex items-center justify-center rounded-md p-2"
@@ -127,7 +126,7 @@
     >
       <div class="pb-3sm:px-3 space-y-1 px-5">
         <h6 class="font-md tracking-tight">
-          <span class="inline-block">Webible</span>
+          <span class="inline-block">{{appConfig.description}}</span>
         </h6>
       </div>
       <!-- link mobile -->

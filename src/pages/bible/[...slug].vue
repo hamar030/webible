@@ -1,117 +1,536 @@
 <template>
-  <div class="text-nowrap">
-    list book:
-    <ul class="list-disc">
-      <li
-        v-for="book in useBook.listBooks"
-        :key="book.id"
+  <!-- component should be ruseable -->
+  <!-- need to change -->
+  <div class="h-full w-full">
+    <span class="sr-only"> Menu Bar </span><div
+      id="bibleMenuBar"
+      class="sticky top-0 z-10"
+    >
+      <span class="sr-only">backdrop blurr</span>
+      <div
+        class="absolute inset-0 h-full w-full bg-white/70 backdrop-blur-[25px] dark:bg-neutral-950/70"
+      ></div>
+      <span class="sr-only">menu main</span>
+      <div class="relative flex flex-row">
+        <div class="flex flex-row md:flex-1">
+          <div class="flex w-full flex-row md:min-w-60">
+            <span
+              v-show="false"
+              class="mr-2 mt-2 min-w-32 self-center"
+              >Book Version:</span
+            >
+            <div class="w-full">
+              <HeadlessCombobox
+                v-model="useBook.selectedBook"
+                text-gray-900
+              >
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    :display-value="() => useBook.selectedBook.name"
+                    @change="sq = $event.target.value"
+                  />
+                  <span
+                    v-show="useBook.selectedBook.latin_name != null"
+                    class="absolute inset-y-0 right-0 inline-flex items-center pr-8 text-sm text-gray-400"
+                    >{{ useBook.selectedBook.latin_name }}</span
+                  >
+                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white/10 p-1 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none dark:bg-slate-900/10 sm:text-sm"
+                    >
+                      <div
+                        v-if="filteredBook.length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-4 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOption
+                        v-for="(book, index) in filteredBook"
+                        :key="index"
+                        v-slot="{ active, selected }"
+                        :value="book"
+                        class="relative"
+                      >
+                        <li
+                          class="rounded-md p-2"
+                          :class="[
+                            active
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-transparent text-gray-900 dark:text-white'
+                          ]"
+                        >
+                          {{ book.name }}
+                          <span
+                            v-show="book.latin_name != null"
+                            text-gray-900
+                            :class="[active ? 'text-gray-200' : 'text-gray-400']"
+                          >
+                            | {{ book.latin_name }}</span
+                          >
+                          <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                            <CheckIcon
+                              v-show="selected"
+                              class="h4 w-4"
+                            />
+                          </span>
+                        </li>
+                      </HeadlessComboboxOption>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+          <!-- <div class="NOT-USED hidden sr-only flex w-full flex-row p-1 md:min-w-60">
+            <span v-show="false" class="mr-2 mt-2 min-w-32 self-center">Book Part: </span>
+            <div class="w-full">
+              <div class="relative mt-2">
+                <input
+                  disabled
+                  type="text"
+                  :value="currentPart.Name"
+                  class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                />
+                <span
+                  v-show="currentPart.latinName != null"
+                  class="absolute inset-y-0 right-0 flex items-center pr-8 text-sm text-gray-400"
+                  :class="{ 'text-gray-200': false, 'text-gray-400': !false }"
+                >
+                  {{ currentPart.latinName }}</span
+                >
+              </div>
+            </div>
+          </div> -->
+        </div>
+        <div class="flex flex-row">
+          <div class="flex w-full flex-row p-1 md:min-w-60">
+            <span class="sr-only mr-2 mt-2 min-w-32 self-center">Script: </span>
+            <div class="w-full">
+              <HeadlessCombobox v-model="useBook.selectedScript">
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    :display-value="() => useBook.selectedScript.name"
+                    @change="sq = $event.target.value"
+                  />
+                  <span
+                    v-if="useBook.selectedScript.latin_name != null"
+                    class="absolute inset-y-0 right-0 flex items-center pr-8 text-sm text-gray-400"
+                    >{{ useBook.selectedScript.name }}</span
+                  >
+                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-[1] mt-1 max-h-60 w-full origin-top-right divide-y divide-gray-100 overflow-auto rounded-md bg-white/10 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none dark:bg-slate-900/10 sm:text-sm"
+                    >
+                      <div
+                        v-if="filteredScript.flat().length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-4 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOptions
+                        v-for="(part, part_index) in filteredScript"
+                        :key="part_index"
+                        as="div"
+                        :class="filteredScript.flat().length === 0 && sq !== '' ? '' : 'p-1'"
+                      >
+                        <div
+                          v-if="useBook.listParts[part_index].scripts.length !== 0"
+                          class="p-2 text-gray-400"
+                        >
+                          <span>{{ useBook.listParts[part_index].name }}</span>
+                          <span v-show="useBook.listParts[part_index].latin_name != null">
+                            | {{ useBook.listParts[part_index].latin_name }}</span
+                          >
+                        </div>
+                        <HeadlessComboboxOption
+                          v-for="(script, index) in part"
+                          :key="part_index + '.' + index"
+                          v-slot="{ active, selected }"
+                          :value="script"
+                          class="relative"
+                        >
+                          <li
+                            class="rounded-md p-2"
+                            :class="[
+                              active
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-transparent text-gray-900 dark:text-white'
+                            ]"
+                          >
+                            {{ script.name }}
+                            <span
+                              v-show="script.latin_name != null"
+                              text-gray-900
+                              :class="[active ? 'text-gray-200' : 'text-gray-400']"
+                            >
+                              | {{ script.latin_name }}</span
+                            >
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                              <CheckIcon
+                                v-show="selected"
+                                class="h4 w-4"
+                              />
+                            </span>
+                          </li>
+                        </HeadlessComboboxOption>
+                      </HeadlessComboboxOptions>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+          <div class="flex min-w-28 grow-0 flex-row p-1">
+            <span class="sr-only mr-2 mt-2 min-w-32 self-center">Chapter: </span>
+            <div class="w-full">
+              <HeadlessCombobox v-model="useBook.selectedChapter">
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    :display-value="() => useBook.selectedChapter.id.toString()"
+                    @change="sq = $event.target.value"
+                  />
+                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white/10 p-1 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none dark:bg-slate-900/10 sm:text-sm"
+                    >
+                      <div
+                        v-if="filteredChapter.length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-2 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOption
+                        v-for="(chapter, index) in filteredChapter"
+                        :key="index"
+                        v-slot="{ active, selected }"
+                        :value="chapter"
+                        class="relative"
+                      >
+                        <li
+                          class="rounded-md p-2"
+                          :class="{
+                            'bg-blue-500 text-white': active,
+                            'bg-transparent text-gray-900 dark:text-white': !active
+                          }"
+                        >
+                          {{ chapter.id }}
+                          <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                            <CheckIcon
+                              v-show="selected"
+                              class="h4 w-4"
+                            />
+                          </span>
+                        </li>
+                      </HeadlessComboboxOption>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="sr-only">menu config</span>
+      <div class="relative">
+        <div class="flex flex-row items-center justify-between p-1 text-xs">
+          <div class="flex flex-1 flex-row">
+            <div class="text-left">
+              <button
+                class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                :disabled="useBook.isPrevAvailable"
+                @click="useBook.prevChapter"
+              >
+                <ChevronLeftIcon class="-ml-1 mr-2 h-4 w-4" />Previous
+              </button>
+            </div>
+            <HeadlessMenu
+              as="div"
+              class="relative inline-block text-left"
+            >
+              <div>
+                <HeadlessMenuButton
+                  class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                >
+                  Options
+                  <ChevronDownIcon
+                    class="-mr-1 ml-2 h-4 w-4"
+                    aria-hidden="true"
+                  />
+                </HeadlessMenuButton>
+              </div>
+              <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <HeadlessMenuItems
+                  class="absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white/10 shadow-lg ring-1 ring-black/5 backdrop-blur focus:outline-none dark:bg-slate-900/10"
+                >
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.verseNumber"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                      >
+                        Show Verse Number
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.verseInline"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Show Verse Inline
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.pericope"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Show Pericope
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.readWide"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Wide Reading
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                </HeadlessMenuItems>
+              </transition>
+            </HeadlessMenu>
+          </div>
+          <div class="text-left">
+            <button
+              class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+              :disabled="useBook.isNextAvailable"
+              @click="useBook.nextChapter"
+            >
+              Next
+              <ChevronRightIcon class="-mr-1 ml-2 h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-5">
+      <hr />
+    </div>
+    <span class="sr-only"> Verses </span>
+    <div class="flex justify-center">
+      <article
+        class="prose w-full font-display dark:prose-invert"
+        :class="[
+          useConfig.readWide ? 'max-w-none' : '',
+          useBook.selectedBook.lang == 'he' ? 'rtl text-right' : 'text-left' // rtl when lang=he
+        ]"
       >
-        <button @click="selectBook(book)">{{ book }}</button>
-      </li>
-    </ul>
-    <hr />
-    list parts:
-    <ul class="list-disc">
-      <li
-        v-for="part in useBook.listScripts"
-        :key="part.id"
-      >
-        {{ part.name }}
-        list scripts:
-        <ul class="list-disc">
-          <li
-            v-for="script in part.scripts"
-            :key="script.id"
+        <p>
+          <span
+            v-for="(verse, index) in filteredVerse"
+            :key="index"
           >
-            <button @click="selectScript(script)">{{ script }}</button>
-          </li>
-        </ul>
-      </li>
-    </ul>
-    <hr />
-    list chapters:
-    <ul>
-      <li
-        v-for="chapter in useBook.listChapter"
-        :key="chapter?.id"
-      >
-        <button
-          v-if="chapter != null"
-          @click="selectChapter(chapter)"
-        >
-          {{ chapter }}
-        </button>
-      </li>
-    </ul>
-    <hr />
-    <p>
-      selected book: {{ useBook.selectedBook }}
-      <br />
-      selected script: {{ useBook.selectedScript }}
-      <br />
-      selected chapter: {{ useBook.selectedChapter }}
-    </p>
+            <br v-if="verse.pericope != null && index != 0" />
+            <h3 v-if="verse.pericope != null && useConfig.pericope">{{ verse.pericope }}</h3>
+            <span
+              :class="{
+                block: !useConfig.verseInline,
+                'mx-1': useConfig.verseInline,
+                'mt-6': index == 0 && (verse.pericope == null || !useConfig.pericope)
+              }"
+            >
+              <sup
+                v-show="useConfig.verseNumber"
+                class="text-xs font-bold"
+                >{{ verse.id }}&nbsp;</sup
+              >
+              <span>{{ verse.text }}</span>
+            </span>
+          </span>
+        </p>
+      </article>
+    </div>
+    <div>
+      <div class="py-5">
+        <hr />
+        <div class="pt-5 text-xs">
+          Remember: Reading from Torah Scroll or Origin Scripture is more better than this.
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script async setup lang="ts">
-// import {
-//   ChevronUpDownIcon,
-//   ChevronDownIcon,
-//   CheckIcon,
-//   ChevronLeftIcon,
-//   ChevronRightIcon
-// } from '@heroicons/vue/24/solid'
+import {
+  ChevronUpDownIcon,
+  ChevronDownIcon,
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/vue/24/solid'
 
-import { useNuxtApp } from '#imports'
-import { definePageMeta } from '#imports'
-import { useBookStore } from '#imports'
-import type { IBook, IScript, IChapter } from '@/stores/Books'
+import { definePageMeta, useBookStore, useBibleConfigStore, computed, ref } from '#imports'
 definePageMeta({
   title: 'Webible - Bible',
   layout: 'reading'
 })
 
-const { $client } = useNuxtApp()
+// const { $trpc } = useNuxtApp()
+const useConfig = useBibleConfigStore()
 const useBook = useBookStore()
-
-Promise.all([
-  await $client.bible.list.query(),
-  await $client.bible.script.list.query({ bookId: 1 }),
-  await $client.bible.script.chapter.list.query({ script: { id: 1, name: 'Script Name' } })
-]).then((data) => {
-  useBook.init(data[0], data[1], data[2])
+await useBook.initialize()
+const sq = ref('')
+/**
+ * @return an filltered verse
+ */
+const filteredBook = computed(() =>
+  sq.value === ''
+    ? useBook.listBooks
+    : useBook.listBooks.filter((book) => {
+        return book.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
+      })
+)
+const filteredScript = computed(() =>
+  sq.value === ''
+    ? useBook.listParts.map((part) => part.scripts)
+    : useBook.listParts.map((part) =>
+        part.scripts.filter((script) =>
+          script.name
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
+        )
+      )
+)
+const filteredChapter = computed(() =>
+  sq.value === ''
+    ? useBook.listChapters
+    : useBook.listChapters.filter((chapter) => {
+        return chapter.id
+          .toString()
+          .match(new RegExp('^' + sq.value.replace(/(\/)|(\\)|(\s+)/g, '')))
+      })
+)
+const filteredVerse = computed(() => {
+  // todo: return verses per pericope as paragraph
+  // so [[paragraph with pericope][and another paragraph with pericope]]
+  return useBook.selectedChapter.verses.filter((verse) => {
+    return verse
+  })
 })
-// need to change
-const selectBook = async (book: Omit<IBook, 'parts'>) => {
-  const scripts = await $client.bible.script.list.query({ bookId: book.id })
-  const chapters = await $client.bible.script.chapter.list.query({
-    script: {
-      id: scripts[0].scripts[0].id,
-      name: scripts[0].scripts[0].name
-    }
-  })
-  useBook.selectBook(book)
-  useBook.set_listScripts(scripts)
-  useBook.set_listChapters(chapters)
-  useBook.selectScript(scripts[0].scripts[0])
-  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'>)
-}
-const selectScript = async (script: IScript) => {
-  const chapters = await $client.bible.script.chapter.list.query({
-    script: { id: script.id, name: script.name }
-  })
-  useBook.selectScript(script)
-  useBook.set_listChapters(chapters)
-  useBook.selectChapter(chapters[0] as Omit<IChapter, 'verses'>)
-}
-const selectChapter = async (chapter: Omit<IChapter, 'verses'> | null) => {
-  useBook.selectedChapter = chapter as Omit<IChapter, 'verses'>
-}
-// const a = ref(useBook.selectedBook)
-// watch(a, async (book) => {
-
-// })
 </script>
 
 <style scoped></style>

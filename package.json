@@ -12,6 +12,9 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
   },
+  "overrides": {
+    "vue": "latest"
+  },
   "dependencies": {
     "@fontsource-variable/heebo": "^5.0.17",
     "@fontsource-variable/nunito": "^5.0.17",
@@ -19,13 +22,14 @@
     "@pinia/nuxt": "^0.5.1",
     "@trpc/client": "^10.45.1",
     "@trpc/server": "^10.45.1",
+    "@types/lodash": "^4.14.202",
     "@vueuse/nuxt": "^10.8.0",
+    "lodash": "^4.17.21",
     "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.7",
-    "postcss-minify": "^1.1.0",
-    "swiper": "^11.0.6",
     "trpc-nuxt": "^0.10.19",
     "vue": "^3.4.19",
+    "vue-lodash": "^2.1.2",
     "vue-router": "^4.2.5",
     "yaml": "^2.3.4",
     "zod": "^3.22.4"
@@ -33,6 +37,7 @@
   "devDependencies": {
     "@headlessui/vue": "^1.7.17",
     "@heroicons/vue": "^2.1.1",
+    "@netlify/plugin-lighthouse": "^6.0.0",
     "@nuxtjs/color-mode": "^3.3.2",
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/tailwindcss": "^6.11.4",
@@ -46,7 +51,7 @@
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.21.1",
-    "netlify-cli": "^17.16.1",
+    "netlify-cli": "^17.17.0",
     "nuxt": "^3.10.2",
     "nuxt-headlessui": "^1.1.5",
     "nuxt-lodash": "^2.5.3",

@@ -13,11 +13,12 @@
         <div v-else>
           <h1>error:</h1>
           <p class="rounded-md text-slate-600 dark:text-slate-400">
-            {{ error?.cause }}{{ error?.message }}
-
+            {{ error?.cause }}
             <br />
-            {{ error?.stack }}
+            {{ error?.message }}
           </p>
+          <h1>stack:</h1>
+          <p>{{ h(error?.stack??'div') }}</p>
         </div>
       </div>
     </div>
@@ -25,5 +26,6 @@
 </template>
 <script setup lang="ts">
 import { useError } from '#app'
+import { h } from 'vue'
 const error = useError()
 </script>

@@ -9,3 +9,10 @@ publish = 'dist'
   environment = {SERVER_PRESET='netlify_edge'}
   autoLaunch = false
   targetPort = 3000
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+  # optional, deploy the lighthouse report to a path under your site
+ # [plugins.inputs.audits]
+ #   output_path = "reports/lighthouse.html"

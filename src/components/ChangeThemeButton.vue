@@ -6,10 +6,7 @@
     <span class="absolute -inset-1.5" />
     <span class="sr-only">Change Theme</span>
     <div class="relative m-2 h-3 w-3">
-      <ColorScheme
-        placeholder=""
-        tag="div"
-      >
+      <ClientOnly>
         <Transition
           enter-active-class="transition-all ease-out duration-150"
           enter-from-class="opacity-0 -rotate-45"
@@ -30,7 +27,14 @@
             aria-hidden="true"
           />
         </Transition>
-      </ColorScheme>
+        <template #fallback>
+          <!-- this will be rendered on server side -->
+          <SunIcon
+            class="absolute -inset-1.5"
+            aria-hidden="true"
+          />
+        </template>
+      </ClientOnly>
     </div>
   </button>
 </template>

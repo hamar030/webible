@@ -8,7 +8,10 @@
     /* ... */
   }
   html {
-    @apply h-full w-full bg-white font-body dark:bg-stone-900;
+    @apply h-full w-full font-body;
+  }
+  html.light{
+    @apply bg-white
   }
   html.dark {
     @apply bg-neutral-950;

@@ -2,10 +2,10 @@
   <div>
     <section>
       <h1 class="py-2 text-4xl font-bold">About</h1>
-      <div class="mt-5">
-        <h1 class="font-display text-3xl font-bold tracking-tight">{{ APP_NAME }}</h1>
+      <div class="mt-5 md:hidden">
+        <h1 class="font-display text-3xl font-bold tracking-tight">{{ appConfig.title }}</h1>
         <h6 class="font-md tracking-tight">
-          <span class="inline-block">{{ APP_HEADER }}</span>
+          <span class="inline-block">{{ appConfig.description }}</span>
         </h6>
       </div>
       <div class="mt-5">
@@ -29,8 +29,9 @@
 
 <script lang="ts" setup>
 import { LinkIcon } from '@heroicons/vue/24/outline'
+import { useAppConfig } from '#imports'
 
-const APP_NAME = 'WeBible'
-const APP_HEADER = 'For the Glory of YAHWEH'
+const appConfig = useAppConfig()
+
 </script>
 <style></style>

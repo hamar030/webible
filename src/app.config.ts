@@ -1,6 +1,6 @@
 export default defineAppConfig({
   title: 'WeBible',
-  tag: 'For The Glory of Yah',
+  description: 'For The Glory of Yah',
   theme: {
     dark: true,
     primary: 'sky',

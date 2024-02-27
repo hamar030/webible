@@ -1,49 +1,232 @@
-import type { IBook, IChapter, IPart, IScript } from '@/server/database/book'
+import type { IBook, IChapter, IPart, IScript, IVerse } from '@/server/database/book'
+export type { IBook, IPart, IScript, IChapter, IVerse }
 
-export const useBookStore = defineStore('BooksStore', {
-  state: () => ({
-    listBooks: [{}] as Omit<IBook, 'parts'>[],
-    listScripts: [{}] as IPart[],
-    listChapter: [{}] as (Omit<IChapter, 'verses'> | null)[],
+/**
+ * using trpc on outside instance
+ * @returns $trpc
+ */
+const useTrpc = () => {
+  return useNuxtApp().$trpc
+}
 
-    selectedBook: {} as Omit<IBook, 'parts'>,
-    selectedScript: {} as Omit<IScript, 'chapters'>,
-    selectedChapter: {} as Omit<IChapter, 'verses'>
-  }),
-  actions: {
-    async init(
-      books: Omit<IBook, 'parts'>[],
-      scripts: IPart[],
-      chapters: (Omit<IChapter, 'verses'> | null)[]
-    ) {
-      // const { data: list_books } = await $client.bible.list.useQuery()
-      this.listBooks = books
-      this.listScripts = scripts
-      this.listChapter = chapters
-      this.selectedBook = books[0]
-      this.selectedScript = scripts[0].scripts[0]
-      this.selectedChapter = chapters[0] as Omit<IChapter, 'verses'>
+export const useBookStore = defineStore('BooksStore', () => {
+  // State
+  const books = ref([{}] as IBook[])
+  const selectedIndex = reactive({ book: 0, part: 0, script: 0, chapter: 0 })
+
+  // Getter
+  const listBooks = computed(() => books.value)
+  const listParts = computed(() => selectedBook.value.parts)
+  const listScripts = computed(() => selectedPart.value.scripts)
+  const listChapters = computed(() => selectedScript.value.chapters)
+  const selectedBook = computed({
+    get() {
+      return listBooks.value[selectedIndex.book]
     },
-    async selectBook(book: Omit<IBook, 'parts'>) {
-      this.selectedBook = book
-      // this.listScripts = await $client.bible.script.list.query({
-      //   bookId: this.selectedBook?.id ?? 1
-      // })
-    },
-    set_listScripts(data: IPart[]) {
-      this.listScripts = data
-    },
-    set_listChapters(data: (Omit<IChapter, 'verses'> | null)[]) {
-      this.listChapter = data
-    },
-    selectScript(script: Omit<IScript, 'chapters'>) {
-      this.selectedScript = script
-    },
-    selectChapter(chapter: Omit<IChapter, 'verses'>) {
-      this.selectedChapter = chapter
+    set(book) {
+      selectBook(book)
     }
-  },
-  getters: {}
+  })
+  const selectedPart = computed({
+    get() {
+      return listParts.value[selectedIndex.part]
+    },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    set(part) {}
+  })
+  const selectedScript = computed({
+    get() {
+      return listScripts.value[selectedIndex.script]
+    },
+    set(script) {
+      selectScript(script)
+    }
+  })
+  const selectedChapter = computed({
+    get() {
+      return listChapters.value[selectedIndex.chapter]
+    },
+    async set(chapter) {
+      selectChapter(chapter)
+    }
+  })
+  const isNextAvailable = computed(() => {
+    return (
+      selectedIndex.chapter + 1 == listChapters.value.length &&
+      selectedIndex.script + 1 == listScripts.value.length &&
+      selectedIndex.part + 1 == listParts.value.length
+    )
+  })
+  const isPrevAvailable = computed(() => {
+    return selectedIndex.chapter == 0 && selectedIndex.script == 0 && selectedIndex.part == 0
+  })
+
+  // main action
+  async function initialize() {
+    const { data } = await useTrpc().bible.getInit.useQuery(undefined, { queryKey: 'books' })
+    books.value = data.value ?? ([{}] as IBook[])
+    selectBook(books.value[0])
+  }
+  const selectBook = async (book: IBook) => {
+    const index = books.value.indexOf(book)
+    Promise.all([
+      await checkListScripts(index),
+      await checkListChapters(index, 0, 0),
+      await checkListVerse(index, 0, 0, 0)
+    ])
+    selectedIndex.book = index
+    selectedIndex.part = 0
+    selectedIndex.script = 0
+    selectedIndex.chapter = 0
+    // selectScript(selectedBook.value.parts[0].scripts[0])
+  }
+  const selectScript = async (script: IScript) => {
+    const pindex = selectedBook.value.parts.findIndex((part) => part.scripts.includes(script))
+    const sindex = selectedBook.value.parts[pindex].scripts.indexOf(script)
+    Promise.all([
+      await checkListChapters(selectedIndex.book, pindex, sindex),
+      await checkListVerse(selectedIndex.book, pindex, sindex, 0)
+    ])
+    selectedIndex.part = pindex
+    selectedIndex.script = sindex
+    selectedIndex.chapter = 0
+    // selectChapter(selectedScript.value.chapters[0])
+  }
+  const selectChapter = async (chapter: IChapter) => {
+    const index = selectedScript.value.chapters.indexOf(chapter)
+    await checkListVerse(selectedIndex.book, selectedIndex.part, selectedIndex.script, index)
+    selectedIndex.chapter = index
+  }
+  const nextChapter = async () => {
+    const { book: ib, part: ip, script: is, chapter: ic } = selectedIndex
+    if (selectedIndex.chapter + 1 < listChapters.value.length) {
+      await checkListVerse(ib, ip, is, ic + 1)
+      selectedIndex.chapter++
+    } else {
+      if (selectedIndex.script + 1 < listScripts.value.length) {
+        await checkListChapters(ib, ip, is + 1)
+        await checkListVerse(ib, ip, is + 1, 0)
+        selectedIndex.chapter = 0
+        selectedIndex.script++
+      } else {
+        if (selectedIndex.part + 1 < listParts.value.length) {
+          await checkListChapters(ib, ip + 1, 0)
+          await checkListVerse(ib, ip + 1, 0, 0)
+          selectedIndex.chapter = 0
+          selectedIndex.script = 0
+          selectedIndex.part++
+        }
+      }
+    }
+  }
+  const prevChapter = async () => {
+    const { book: ib, part: ip, script: is, chapter: ic } = selectedIndex
+    if (selectedIndex.chapter > 0) {
+      await checkListVerse(ib, ip, is, ic - 1)
+      selectedIndex.chapter--
+    } else {
+      if (is > 0) {
+        await checkListChapters(ib, ip, is - 1)
+        await checkListVerse(
+          ib,
+          ip,
+          is - 1,
+          selectedPart.value.scripts[is - 1].chapters.length - 1 // chapter index value get from script index before this
+        )
+        selectedIndex.script--
+        selectedIndex.chapter = listChapters.value.length - 1
+      } else {
+        if (ip > 0) {
+          const indexScript = selectedBook.value.parts[ip - 1]
+          const scripts = listParts.value[ip - 1].scripts
+          await checkListChapters(ib, ip - 1, scripts.length - 1)
+          await checkListVerse(
+            ib,
+            ip - 1,
+            scripts.length - 1,
+            scripts[indexScript.scripts.length - 1].chapters.length - 1
+          )
+          selectedIndex.part--
+          selectedIndex.script = listScripts.value.length - 1
+          selectedIndex.chapter = listChapters.value.length - 1
+        }
+      }
+    }
+  }
+
+  // function to check list empty or not and cache it into localdb
+  const checkListScripts = async (bookIndex: number) => {
+    if (books.value[bookIndex].parts.length === 0) {
+      books.value[bookIndex].parts = await useTrpc().bible.script.list.query({
+        bookId: bookIndex + 1
+      })
+      console.debug('downloaded: script-list')
+    }
+  }
+  const checkListChapters = async (bookIndex: number, partIndex: number, scriptIndex: number) => {
+    if (books.value[bookIndex].parts[partIndex].scripts[scriptIndex].chapters.length === 0) {
+      books.value[bookIndex].parts[partIndex].scripts[scriptIndex].chapters =
+        await useTrpc().bible.script.chapter.list.query({
+          index: { book: bookIndex, part: partIndex, script: scriptIndex }
+        })
+      console.debug('downloaded: chapter-list')
+    }
+  }
+  const checkListVerse = async (
+    bookIndex: number,
+    partIndex: number,
+    scriptIndex: number,
+    chapterIndex: number
+  ) => {
+    if (
+      books.value[bookIndex].parts[partIndex].scripts[scriptIndex].chapters[chapterIndex].verses
+        .length === 0
+    ) {
+      books.value[bookIndex].parts[partIndex].scripts[scriptIndex].chapters[chapterIndex].verses =
+        await useTrpc().bible.script.chapter.verse.list.query({
+          index: {
+            book: bookIndex,
+            part: partIndex,
+            script: scriptIndex,
+            chapter: chapterIndex
+          }
+        })
+      console.debug('downloaded: verse-list')
+    }
+  }
+
+  // auto check
+  // todo: auto check before change index
+  // need to change the code
+  // watchEffect(() => {
+  //   console.log(selectedIndex)
+  // })
+
+  return {
+    // State
+    books,
+    selectedBook,
+    selectedPart,
+    selectedScript,
+    selectedChapter,
+    // Getter
+    listBooks,
+    listParts,
+    listScripts,
+    listChapters,
+    isNextAvailable,
+    isPrevAvailable,
+    // Actions
+    initialize,
+    selectBook,
+    selectScript,
+    selectChapter,
+    nextChapter,
+    prevChapter
+  }
 })
 
-export type { IBook, IPart, IScript, IChapter, IVerse }
+// make sure to pass the right store definition, `useAuth` in this case.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useBookStore, import.meta.hot))
+}

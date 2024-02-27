@@ -12,6 +12,22 @@ export default defineNuxtConfig({
   dir: {
     public: './public/'
   },
+  routeRules: {
+    '/**': { prerender: true },
+    '/bible/**': { isr: true },
+    '/api/**': { cors: true }
+  },
+  plugins: [],
+  modules: [
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/tailwindcss',
+    'nuxt-headlessui',
+    '@vueuse/nuxt',
+    // 'nuxt-swiper',
+    'nuxt-lodash',
+    '@pinia/nuxt'
+  ],
   vite: {
     vue: {},
     build: {
@@ -32,18 +48,16 @@ export default defineNuxtConfig({
       cssnano: {}
     }
   },
-  swiper: {
-    // Swiper options
-    //----------------------
-    // prefix: 'Swiper',
-    // styleLang: 'css',
-    // modules: ['navigation', 'pagination'], // all modules are imported by default
+  pinia: {
+    storesDirs: ['./src/stores/**']
   },
-  routeRules: {
-    '/**': { prerender: true },
-    '/bible/**': { isr: true },
-    '/api/**': { cors: true }
-  },
+  // swiper: {
+  //   // Swiper options
+  //   //----------------------
+  //   // prefix: 'Swiper',
+  //   // styleLang: 'css',
+  //   // modules: ['navigation', 'pagination'], // all modules are imported by default
+  // },
   nitro: {
     esbuild: {
       options: {
@@ -54,17 +68,6 @@ export default defineNuxtConfig({
   build: {
     transpile: ['trpc-nuxt']
   },
-  plugins: [],
-  modules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/tailwindcss',
-    'nuxt-headlessui',
-    '@vueuse/nuxt',
-    'nuxt-swiper',
-    'nuxt-lodash',
-    '@pinia/nuxt',
-  ],
   typescript: {
     typeCheck: true,
     strict: true
