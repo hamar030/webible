@@ -1,0 +1,546 @@
+<template>
+  <!-- component should be ruseable -->
+  <!-- need to change -->
+  <div class="h-full w-full">
+    <span class="sr-only"> Menu Bar </span>
+    <div
+      id="bibleMenuBar"
+      class="sticky top-0 z-10"
+    >
+      <span class="sr-only">backdrop blurr</span>
+      <div
+        class="absolute inset-0 h-full w-full bg-white/70 backdrop-blur-[25px] dark:bg-neutral-950/70"
+      ></div>
+      <span class="sr-only">menu main</span>
+      <div class="relative flex flex-row">
+        <div class="flex flex-row md:flex-1">
+          <div class="flex w-full flex-row md:min-w-60">
+            <span
+              v-show="false"
+              class="mr-2 mt-2 min-w-32 self-center"
+              >Book Version:</span
+            >
+            <div class="w-full">
+              <HeadlessCombobox
+                v-model="useBook.selectedBook"
+                text-gray-900
+              >
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="cb-input"
+                    :display-value="() => useBook.selectedBook.name"
+                    @change="sq = $event.target.value"
+                  />
+                  <span
+                    v-show="useBook.selectedBook.alt_name != null"
+                    class="absolute inset-y-0 right-0 inline-flex items-center pr-8 text-sm text-gray-400"
+                    >{{ useBook.selectedBook.alt_name }}</span
+                  >
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select book"
+                  >
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white/10 p-1 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none sm:text-sm dark:bg-slate-900/10"
+                    >
+                      <div
+                        v-if="filteredBook.length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-4 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOption
+                        v-for="(book, index) in filteredBook"
+                        :key="index"
+                        v-slot="{ active, selected }"
+                        :value="book"
+                        class="relative"
+                      >
+                        <li
+                          class="rounded-md p-2"
+                          :class="[
+                            active
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-transparent text-gray-900 dark:text-white'
+                          ]"
+                        >
+                          {{ book.name }}
+                          <span
+                            v-show="book.alt_name != null"
+                            text-gray-900
+                            :class="[active ? 'text-gray-200' : 'text-gray-400']"
+                          >
+                            | {{ book.alt_name }}</span
+                          >
+                          <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                            <CheckIcon
+                              v-show="selected"
+                              class="h4 w-4"
+                            />
+                          </span>
+                        </li>
+                      </HeadlessComboboxOption>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="flex w-full flex-row p-1 md:min-w-60">
+            <span class="sr-only mr-2 mt-2 min-w-32 self-center">Script: </span>
+            <div class="w-full">
+              <HeadlessCombobox v-model="useBook.selectedScript">
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="cb-input"
+                    :display-value="() => useBook.selectedScript.name"
+                    @change="sq = $event.target.value"
+                  />
+                  <span
+                    v-if="useBook.selectedScript.alt_name != null"
+                    class="absolute inset-y-0 right-0 flex items-center pr-8 text-sm text-gray-400"
+                    >{{ useBook.selectedScript.name }}</span
+                  >
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select script"
+                  >
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-[1] mt-1 max-h-60 w-full origin-top-right divide-y divide-gray-100 overflow-auto rounded-md bg-white/10 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none sm:text-sm dark:bg-slate-900/10"
+                    >
+                      <div
+                        v-if="filteredScript.flat().length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-4 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOptions
+                        v-for="(part, part_index) in filteredScript"
+                        :key="part_index"
+                        as="div"
+                        :class="filteredScript.flat().length === 0 && sq !== '' ? '' : 'p-1'"
+                      >
+                        <div
+                          v-if="useBook.listParts[part_index].scripts.length !== 0"
+                          class="p-2 text-gray-400"
+                        >
+                          <span>{{ useBook.listParts[part_index].name }}</span>
+                          <span v-show="useBook.listParts[part_index].alt_name != null">
+                            | {{ useBook.listParts[part_index].alt_name }}</span
+                          >
+                        </div>
+                        <HeadlessComboboxOption
+                          v-for="(script, index) in part"
+                          :key="part_index + '.' + index"
+                          v-slot="{ active, selected }"
+                          :value="script"
+                          class="relative"
+                        >
+                          <li
+                            class="rounded-md p-2"
+                            :class="[
+                              active
+                                ? 'bg-blue-500 text-white'
+                                : 'bg-transparent text-gray-900 dark:text-white'
+                            ]"
+                          >
+                            {{ script.name }}
+                            <span
+                              v-show="script.alt_name != null"
+                              text-gray-900
+                              :class="[active ? 'text-gray-200' : 'text-gray-400']"
+                            >
+                              | {{ script.alt_name }}</span
+                            >
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                              <CheckIcon
+                                v-show="selected"
+                                class="h4 w-4"
+                              />
+                            </span>
+                          </li>
+                        </HeadlessComboboxOption>
+                      </HeadlessComboboxOptions>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+          <div class="flex min-w-28 grow-0 flex-row p-1">
+            <span class="sr-only mr-2 mt-2 min-w-32 self-center">Chapter: </span>
+            <div class="w-full">
+              <HeadlessCombobox v-model="useBook.selectedChapter">
+                <div class="relative mt-2">
+                  <HeadlessComboboxInput
+                    class="cb-input"
+                    :display-value="() => useBook.selectedChapter.id.toString()"
+                    @change="sq = $event.target.value"
+                  />
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select chapter"
+                  >
+                    <ChevronUpDownIcon
+                      class="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </HeadlessComboboxButton>
+                  <Transition
+                    enter-active-class="transition duration-100 ease-out"
+                    enter-from-class="transform scale-95 opacity-0"
+                    enter-to-class="transform scale-100 opacity-100"
+                    leave-active-class="transition duration-75 ease-out"
+                    leave-from-class="transform scale-100 opacity-100"
+                    leave-to-class="transform scale-95 opacity-0"
+                    @after-leave="sq = ''"
+                  >
+                    <HeadlessComboboxOptions
+                      class="absolute z-[1] mt-1 max-h-60 w-full overflow-auto rounded-md bg-white/10 p-1 text-base shadow-lg ring-1 ring-black/5 backdrop-blur-sm focus:outline-none sm:text-sm dark:bg-slate-900/10"
+                    >
+                      <div
+                        v-if="filteredChapter.length === 0 && sq !== ''"
+                        class="relative cursor-default select-none px-2 py-2 text-gray-700"
+                      >
+                        Nothing found.
+                      </div>
+                      <HeadlessComboboxOption
+                        v-for="(chapter, index) in filteredChapter"
+                        :key="index"
+                        v-slot="{ active, selected }"
+                        :value="chapter"
+                        class="relative"
+                      >
+                        <li
+                          class="rounded-md p-2"
+                          :class="{
+                            'bg-blue-500 text-white': active,
+                            'bg-transparent text-gray-900 dark:text-white': !active
+                          }"
+                        >
+                          {{ chapter.id }}
+                          <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                            <CheckIcon
+                              v-show="selected"
+                              class="h4 w-4"
+                            />
+                          </span>
+                        </li>
+                      </HeadlessComboboxOption>
+                    </HeadlessComboboxOptions>
+                  </Transition>
+                </div>
+              </HeadlessCombobox>
+            </div>
+          </div>
+        </div>
+      </div>
+      <span class="sr-only">menu config</span>
+      <div class="relative text-gray-900 dark:text-white">
+        <div class="flex flex-row items-center justify-between p-1 text-xs">
+          <div class="flex flex-1 flex-row">
+            <div class="text-left">
+              <button
+                class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                :disabled="useBook.isPrevAvailable"
+                @click="useBook.prevChapter"
+              >
+                <ChevronLeftIcon class="-ml-1 mr-2 h-4 w-4" />Previous
+              </button>
+            </div>
+            <HeadlessMenu
+              as="div"
+              class="relative inline-block text-left"
+            >
+              <div>
+                <HeadlessMenuButton
+                  class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                >
+                  Options
+                  <ChevronDownIcon
+                    class="-mr-1 ml-2 h-4 w-4"
+                    aria-hidden="true"
+                  />
+                </HeadlessMenuButton>
+              </div>
+              <transition
+                enter-active-class="transition duration-100 ease-out"
+                enter-from-class="transform scale-95 opacity-0"
+                enter-to-class="transform scale-100 opacity-100"
+                leave-active-class="transition duration-75 ease-in"
+                leave-from-class="transform scale-100 opacity-100"
+                leave-to-class="transform scale-95 opacity-0"
+              >
+                <HeadlessMenuItems
+                  class="absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white/10 shadow-lg ring-1 ring-black/5 backdrop-blur focus:outline-none dark:bg-slate-900/10"
+                >
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.verseNumber"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                      >
+                        Show Verse Number
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.verseInline"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Show Verse Inline
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.pericope"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Show Pericope
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                  <div class="p-1">
+                    <HeadlessMenuItem
+                      v-slot="{ active }"
+                      class="relative"
+                    >
+                      <HeadlessSwitch
+                        v-slot="{ checked }"
+                        v-model="useConfig.readWide"
+                        :class="[
+                          active ? 'bg-blue-500 text-white' : 'text-gray-900 dark:text-white',
+                          'group text-sm'
+                        ]"
+                        class="flex w-full items-center rounded-md p-2"
+                        >Wide Reading
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-2">
+                          <CheckIcon
+                            v-show="checked"
+                            class="h4 w-4"
+                          />
+                        </span>
+                      </HeadlessSwitch>
+                    </HeadlessMenuItem>
+                  </div>
+                </HeadlessMenuItems>
+              </transition>
+            </HeadlessMenu>
+          </div>
+          <div class="text-left">
+            <button
+              class="inline-flex w-full justify-center rounded-md px-4 py-2 font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+              :disabled="useBook.isNextAvailable"
+              @click="useBook.nextChapter"
+            >
+              Next
+              <ChevronRightIcon class="-mr-1 ml-2 h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="py-5">
+      <hr />
+    </div>
+    <span class="sr-only"> Verses </span>
+    <div class="flex justify-center px-2">
+      <article
+        class="prose font-display dark:prose-invert w-full"
+        :class="[
+          useConfig.readWide ? 'max-w-none' : '',
+          useBook.selectedBook.language == 'he' ? 'rtl text-right' : 'text-left' // rtl when lang=he
+        ]"
+      >
+        <p>
+          <span
+            v-for="(verse, index) in filteredVerse"
+            :key="index"
+          >
+            <br v-if="verse.pericope != null && index != 0" />
+            <h3 v-if="verse.pericope != null && useConfig.pericope">{{ verse.pericope }}</h3>
+            <span
+              :class="{
+                block: !useConfig.verseInline,
+                'mx-1': useConfig.verseInline,
+                'mt-6': index == 0 && (verse.pericope == null || !useConfig.pericope)
+              }"
+            >
+              <sup
+                v-show="useConfig.verseNumber"
+                class="text-xs font-bold"
+                >{{ verse.id }}&nbsp;</sup
+              >
+              <span>{{ verse.text }}</span>
+            </span>
+          </span>
+        </p>
+      </article>
+    </div>
+    <div>
+      <div class="py-5">
+        <hr />
+        <div class="pt-5 text-xs">
+          Remember: Reading from Torah Scroll or Origin Scripture is more better than this.
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import {
+  ChevronUpDownIcon,
+  ChevronDownIcon,
+  CheckIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from '@heroicons/vue/24/solid'
+
+import {
+  definePageMeta,
+  useSeoMeta,
+  useNuxtApp,
+  useBookStore,
+  useBibleConfigStore,
+  computed,
+  ref
+} from '#imports'
+
+definePageMeta({
+  layout: 'reading'
+})
+
+useSeoMeta({
+  title: 'Webible - bible',
+  ogType: 'article'
+})
+
+const { $trpc } = useNuxtApp()
+const useConfig = useBibleConfigStore()
+const useBook = useBookStore()
+const sq = ref('')
+
+const data = await $trpc.bible.getInit.query({ index: { book: 0, part: 0, script: 0, chapter: 0 } })
+useBook.$patch({ books: data })
+
+/**
+ * @return an filltered verse
+ */
+const filteredBook = computed(() =>
+  sq.value === ''
+    ? useBook.listBooks
+    : useBook.listBooks.filter((book) => {
+        return book.name
+          .toLowerCase()
+          .replace(/\s+/g, '')
+          .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
+      })
+)
+const filteredScript = computed(() =>
+  sq.value === ''
+    ? useBook.listParts.map((part) => part.scripts)
+    : useBook.listParts.map((part) =>
+        part.scripts.filter((script) =>
+          script.name
+            .toLowerCase()
+            .replace(/\s+/g, '')
+            .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
+        )
+      )
+)
+const filteredChapter = computed(() =>
+  sq.value === ''
+    ? useBook.listChapters
+    : useBook.listChapters.filter((chapter) => {
+        return chapter.id
+          .toString()
+          .match(new RegExp('^' + sq.value.replace(/(\/)|(\\)|(\s+)/g, '')))
+      })
+)
+const filteredVerse = computed(() => {
+  // todo: return verses per pericope as paragraph
+  // so [[paragraph with pericope][and another paragraph with pericope]]
+  return useBook.selectedChapter.verses.filter((verse) => {
+    return verse
+  })
+})
+</script>
+
+<style scoped lang="pcss">
+.cb-input {
+  @apply w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100;
+}
+</style>

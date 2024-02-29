@@ -2,13 +2,14 @@
   <!-- component should be ruseable -->
   <!-- need to change -->
   <div class="h-full w-full">
-    <span class="sr-only"> Menu Bar </span><div
+    <span class="sr-only"> Menu Bar </span>
+    <div
       id="bibleMenuBar"
       class="sticky top-0 z-10"
     >
       <span class="sr-only">backdrop blurr</span>
       <div
-        class="absolute inset-0 h-full w-full bg-white/70 backdrop-blur-[25px] dark:bg-neutral-950/70"
+        class="absolute inset-0 h-full w-full bg-white/70 dark:bg-neutral-950/70 backdrop-blur-[25px]"
       ></div>
       <span class="sr-only">menu main</span>
       <div class="relative flex flex-row">
@@ -26,16 +27,19 @@
               >
                 <div class="relative mt-2">
                   <HeadlessComboboxInput
-                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    class="cb-input"
                     :display-value="() => useBook.selectedBook.name"
                     @change="sq = $event.target.value"
                   />
                   <span
-                    v-show="useBook.selectedBook.latin_name != null"
+                    v-show="useBook.selectedBook.alt_name != null"
                     class="absolute inset-y-0 right-0 inline-flex items-center pr-8 text-sm text-gray-400"
-                    >{{ useBook.selectedBook.latin_name }}</span
+                    >{{ useBook.selectedBook.alt_name }}</span
                   >
-                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select book"
+                  >
                     <ChevronUpDownIcon
                       class="h-5 w-5 text-gray-400"
                       aria-hidden="true"
@@ -76,11 +80,11 @@
                         >
                           {{ book.name }}
                           <span
-                            v-show="book.latin_name != null"
+                            v-show="book.alt_name != null"
                             text-gray-900
                             :class="[active ? 'text-gray-200' : 'text-gray-400']"
                           >
-                            | {{ book.latin_name }}</span
+                            | {{ book.alt_name }}</span
                           >
                           <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                             <CheckIcon
@@ -96,26 +100,6 @@
               </HeadlessCombobox>
             </div>
           </div>
-          <!-- <div class="NOT-USED hidden sr-only flex w-full flex-row p-1 md:min-w-60">
-            <span v-show="false" class="mr-2 mt-2 min-w-32 self-center">Book Part: </span>
-            <div class="w-full">
-              <div class="relative mt-2">
-                <input
-                  disabled
-                  type="text"
-                  :value="currentPart.Name"
-                  class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
-                />
-                <span
-                  v-show="currentPart.latinName != null"
-                  class="absolute inset-y-0 right-0 flex items-center pr-8 text-sm text-gray-400"
-                  :class="{ 'text-gray-200': false, 'text-gray-400': !false }"
-                >
-                  {{ currentPart.latinName }}</span
-                >
-              </div>
-            </div>
-          </div> -->
         </div>
         <div class="flex flex-row">
           <div class="flex w-full flex-row p-1 md:min-w-60">
@@ -124,16 +108,19 @@
               <HeadlessCombobox v-model="useBook.selectedScript">
                 <div class="relative mt-2">
                   <HeadlessComboboxInput
-                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    class="cb-input"
                     :display-value="() => useBook.selectedScript.name"
                     @change="sq = $event.target.value"
                   />
                   <span
-                    v-if="useBook.selectedScript.latin_name != null"
+                    v-if="useBook.selectedScript.alt_name != null"
                     class="absolute inset-y-0 right-0 flex items-center pr-8 text-sm text-gray-400"
                     >{{ useBook.selectedScript.name }}</span
                   >
-                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select script"
+                  >
                     <ChevronUpDownIcon
                       class="h-5 w-5 text-gray-400"
                       aria-hidden="true"
@@ -168,8 +155,8 @@
                           class="p-2 text-gray-400"
                         >
                           <span>{{ useBook.listParts[part_index].name }}</span>
-                          <span v-show="useBook.listParts[part_index].latin_name != null">
-                            | {{ useBook.listParts[part_index].latin_name }}</span
+                          <span v-show="useBook.listParts[part_index].alt_name != null">
+                            | {{ useBook.listParts[part_index].alt_name }}</span
                           >
                         </div>
                         <HeadlessComboboxOption
@@ -189,11 +176,11 @@
                           >
                             {{ script.name }}
                             <span
-                              v-show="script.latin_name != null"
+                              v-show="script.alt_name != null"
                               text-gray-900
                               :class="[active ? 'text-gray-200' : 'text-gray-400']"
                             >
-                              | {{ script.latin_name }}</span
+                              | {{ script.alt_name }}</span
                             >
                             <span class="absolute inset-y-0 right-0 flex items-center pr-2">
                               <CheckIcon
@@ -216,11 +203,14 @@
               <HeadlessCombobox v-model="useBook.selectedChapter">
                 <div class="relative mt-2">
                   <HeadlessComboboxInput
-                    class="w-full rounded-sm border-none bg-transparent py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 ring-blue-500 focus:outline-none focus:ring-1 dark:text-gray-100"
+                    class="cb-input"
                     :display-value="() => useBook.selectedChapter.id.toString()"
                     @change="sq = $event.target.value"
                   />
-                  <HeadlessComboboxButton class="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <HeadlessComboboxButton
+                    class="absolute inset-y-0 right-0 flex items-center pr-2"
+                    aria-label="select chapter"
+                  >
                     <ChevronUpDownIcon
                       class="h-5 w-5 text-gray-400"
                       aria-hidden="true"
@@ -276,7 +266,7 @@
         </div>
       </div>
       <span class="sr-only">menu config</span>
-      <div class="relative">
+      <div class="relative text-gray-900 dark:text-white">
         <div class="flex flex-row items-center justify-between p-1 text-xs">
           <div class="flex flex-1 flex-row">
             <div class="text-left">
@@ -426,12 +416,12 @@
       <hr />
     </div>
     <span class="sr-only"> Verses </span>
-    <div class="flex justify-center">
+    <div class="flex justify-center px-2">
       <article
         class="prose w-full font-display dark:prose-invert"
         :class="[
           useConfig.readWide ? 'max-w-none' : '',
-          useBook.selectedBook.lang == 'he' ? 'rtl text-right' : 'text-left' // rtl when lang=he
+          useBook.selectedBook.language == 'he' ? 'rtl text-right' : 'text-left' // rtl when lang=he
         ]"
       >
         <p>
@@ -469,68 +459,3 @@
     </div>
   </div>
 </template>
-
-<script async setup lang="ts">
-import {
-  ChevronUpDownIcon,
-  ChevronDownIcon,
-  CheckIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon
-} from '@heroicons/vue/24/solid'
-
-import { definePageMeta, useBookStore, useBibleConfigStore, computed, ref } from '#imports'
-definePageMeta({
-  title: 'Webible - Bible',
-  layout: 'reading'
-})
-
-// const { $trpc } = useNuxtApp()
-const useConfig = useBibleConfigStore()
-const useBook = useBookStore()
-await useBook.initialize()
-const sq = ref('')
-/**
- * @return an filltered verse
- */
-const filteredBook = computed(() =>
-  sq.value === ''
-    ? useBook.listBooks
-    : useBook.listBooks.filter((book) => {
-        return book.name
-          .toLowerCase()
-          .replace(/\s+/g, '')
-          .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
-      })
-)
-const filteredScript = computed(() =>
-  sq.value === ''
-    ? useBook.listParts.map((part) => part.scripts)
-    : useBook.listParts.map((part) =>
-        part.scripts.filter((script) =>
-          script.name
-            .toLowerCase()
-            .replace(/\s+/g, '')
-            .includes(sq.value.toLowerCase().replace(/\s+/g, ''))
-        )
-      )
-)
-const filteredChapter = computed(() =>
-  sq.value === ''
-    ? useBook.listChapters
-    : useBook.listChapters.filter((chapter) => {
-        return chapter.id
-          .toString()
-          .match(new RegExp('^' + sq.value.replace(/(\/)|(\\)|(\s+)/g, '')))
-      })
-)
-const filteredVerse = computed(() => {
-  // todo: return verses per pericope as paragraph
-  // so [[paragraph with pericope][and another paragraph with pericope]]
-  return useBook.selectedChapter.verses.filter((verse) => {
-    return verse
-  })
-})
-</script>
-
-<style scoped></style>

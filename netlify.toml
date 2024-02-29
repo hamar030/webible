@@ -1,11 +1,12 @@
 [build]
-command = 'nuxi build'
-environment = {NODE_VERSION = '20', SERVER_PRESET='netlify_edge'}
+command = 'nuxi prepare && nuxi build --dotenv .env.production'
+environment = {NODE_VERSION = '20', SERVER_PRESET='netlify-edge'}
 publish = 'dist'
+framework = "nuxt"
 
 [dev]
   framework = "nuxt"
-  command= "nuxi dev"
+  command= "nuxi dev --dotenv .env.local"
   environment = {SERVER_PRESET='netlify_edge'}
   autoLaunch = false
   targetPort = 3000
@@ -14,5 +15,5 @@ publish = 'dist'
   package = "@netlify/plugin-lighthouse"
 
   # optional, deploy the lighthouse report to a path under your site
- # [plugins.inputs.audits]
- #   output_path = "reports/lighthouse.html"
+  # [plugins.inputs.audits]
+  #   output_path = "reports/lighthouse.html"

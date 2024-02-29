@@ -18,7 +18,7 @@
             {{ error?.message }}
           </p>
           <h1>stack:</h1>
-          <p>{{ h(error?.stack??'div') }}</p>
+          <p>{{ h(error?.stack ?? 'div') }}</p>
         </div>
       </div>
     </div>

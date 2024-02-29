@@ -5,23 +5,67 @@ import { z } from 'zod'
 export const bibleRouter = router({
   all: publicProcedure.query(({ ctx }) => ctx.books.list),
   list: publicProcedure.query(({ ctx }) => ctx.books.mlist),
-  getInit: publicProcedure.query(({ ctx }) => ctx.books.initData),  
+  getInit: publicProcedure
+    .input(
+      z.object({
+        index: z.object({
+          book: z.number(),
+          part: z.number(),
+          script: z.number(),
+          chapter: z.number()
+        })
+      })
+    )
+    .query(({ input, ctx }) => ctx.books.initData(input.index)),
+  getInitByParams: publicProcedure
+    .input(
+      z.object({
+        bookName: z.string(),
+        scriptName: z.string(),
+        chapterId: z.number()
+      })
+    )
+    .query(({ input, ctx }) =>
+      ctx.books.getInitByParams(input.bookName, input.scriptName, input.chapterId)
+    ),
+  isAvailable: publicProcedure
+    .input(z.object({ bookName: z.string(), scriptName: z.string(), chapterId: z.number() }))
+    .query(({ input, ctx }) =>
+      ctx.books.isAvailable(input.bookName, input.scriptName, input.chapterId)
+    ),
+  getUrlParams: publicProcedure
+    .input(
+      z.object({
+        index: z.object({
+          book: z.number(),
+          part: z.number(),
+          script: z.number(),
+          chapter: z.number()
+        })
+      })
+    )
+    .query(({ input, ctx }) => ctx.books.getUrlParamsByIndex(input.index)),
+  getUrlParamsByBook: publicProcedure
+    .input(z.object({ bookName: z.string() }))
+    .query(({ input, ctx }) => ctx.books.getUrlParamsByBook(input.bookName)),
   script: router({
     list: publicProcedure
       .input(
         z.object({
-          bookId: z.number()
+          index: z.object({
+            book: z.number()
+          })
         })
       )
-      .query(({ input, ctx }) => ctx.books.listScript(input.bookId)),
+      .query(({ input, ctx }) => ctx.books.listPartsWithScripts(input.index)),
     chapter: router({
       list: publicProcedure
         .input(
           z.object({
-            index: z.object({ book: z.number(), part: z.number() , script: z.number()})
+            index: z.object({ book: z.number(), part: z.number(), script: z.number() })
           })
         )
-        .query(({ input, ctx }) => ctx.books.listChapter(input.index)),
+        .query(({ input, ctx }) => ctx.books.listChapters(input.index)),
       verse: router({
         list: publicProcedure
           .input(
@@ -34,13 +78,13 @@ export const bibleRouter = router({
               })
             })
           )
-          .query(({ input, ctx }) => ctx.books.listVerse(input.index))
+          .query(({ input, ctx }) => ctx.books.listVerses(input.index))
       })
     })
   })
-    
-  // for refetching data 
-  // ToDo: auto fetch on per day 
+
+  // for refetching data
+  // ToDo: auto fetch on per day
   // reload: publicProcedure.query(({ ctx }) => {
   //   try {
   //     books.value = Books.initialize()

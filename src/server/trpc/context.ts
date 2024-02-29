@@ -1,15 +1,13 @@
 import { type inferAsyncReturnType } from '@trpc/server'
-import { Books } from '@/server/database/book'
+import { books } from '../utils/books'
 
+const data = await books()
 /**
  * Creates context for an incoming request
  * @link https://trpc.io/docs/context
  */
-
-const books = await Books.initialize()
-console.log('db init done')
 export const createContext = async () => {
-  return { books }
+  return { books: data }
 }
 
 export type Context = inferAsyncReturnType<typeof createContext>

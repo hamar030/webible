@@ -32,6 +32,6 @@ import { LinkIcon } from '@heroicons/vue/24/outline'
 import { useAppConfig } from '#imports'
 
 const appConfig = useAppConfig()
-
 </script>
-<style></style>
+<style scoped>
+</style>

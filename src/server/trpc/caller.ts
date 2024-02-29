@@ -1,5 +1,5 @@
-import { createContext } from './context';
-import { createCaller } from './router';
+import { createContext } from './context'
+import { createCaller } from './router'
 // 2. create a caller using your `Context`
 export const appCaller = createCaller(await createContext())
 
@@ -9,6 +9,5 @@ export const appCaller = createCaller(await createContext())
 // });
 
 // const postList = await appCaller.post.list();
-
 
 export type AppCaller = typeof appCaller

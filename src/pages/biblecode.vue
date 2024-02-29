@@ -6,8 +6,9 @@
 import { definePageMeta } from '#imports'
 definePageMeta({
   title: 'Webible - Bible Code',
-  layout: 'reading'
+  layout: 'reading',
+  // path: '/biblecode'
 })
 </script>
 
-<style></style>
+<style scoped></style>

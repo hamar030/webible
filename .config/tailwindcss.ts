@@ -1,17 +1,17 @@
-/* eslint-disable no-undef */
-
-/** @type {import('tailwindcss').Config} */
+import type { Config } from 'tailwindcss'
 import colors from 'tailwindcss/colors'
+import typography from '@tailwindcss/typography'
 
 export default {
   content: [
-    './components/**/*.{js,vue,ts}',
-    './composables/**/*.{js,vue,ts}',
-    './layouts/**/*.vue',
-    './pages/**/*.vue',
-    './plugins/**/*.{js,ts}',
-    './app.vue',
-    './error.vue'
+    '../src/app/**/*.{js,vue,ts}',
+    '../src/components/**/*.{js,vue,ts}',
+    '../src/composables/**/*.{js,vue,ts}',
+    '../src/layouts/**/*.vue',
+    '../src/pages/**/*.vue',
+    '../src/plugins/**/*.{js,ts}',
+    '../src/app.vue',
+    '../src/error.vue'
   ],
   darkMode: 'class',
   theme: {
@@ -29,9 +29,8 @@ export default {
       colors: {
         primary: colors.sky,
         secondary: colors.teal,
-        neutral: colors.gray
       }
     }
   },
-  plugins: [require('@tailwindcss/typography')]
-}
+  plugins: [typography]
+} satisfies Config

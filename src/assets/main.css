@@ -1,7 +1,17 @@
-@import './base.css';
 @import '@fontsource-variable/heebo';
 @import '@fontsource-variable/nunito';
 @import '@fontsource-variable/nunito-sans';
 
+html {
+  /* @apply h-full w-full font-body; */
+  @apply font-body;
+}
+html.light {
+  @apply bg-white;
+}
+html.dark {
+  @apply bg-neutral-950;
+}
 body {
+  /* @apply h-full w-full */
 }

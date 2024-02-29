@@ -1,7 +1,7 @@
 <template>
   <div class="copyright">
     <span class="inline-block"
-      >© 2024 No Copyright: <a href="https://webible.netlify.app/">WeBible</a></span
+      >WeBible @2024</span
     >
     |
     <span class="inline-block">Hosted by: <a href="https://netlify.com/">Netlify</a></span>
@@ -10,7 +10,7 @@
 
 <script lang="ts" setup></script>
 
-<style>
+<style scoped lang="pcss">
 .copyright {
   @apply w-full p-4 text-center text-neutral-700 dark:text-neutral-200;
 }

@@ -10,11 +10,12 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   ssr: true,
   dir: {
-    public: './public/'
+    public: '~~/public/'
   },
   routeRules: {
     '/**': { prerender: true },
-    '/bible/**': { isr: true },
+    '/bible/**': { prerender: false, isr: 3600 }, //add to isr:true 
+    '/bible-spa/': { prerender: false, ssr: false },
     '/api/**': { cors: true }
   },
   plugins: [],
@@ -23,10 +24,13 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@nuxtjs/tailwindcss',
     'nuxt-headlessui',
+    '@nuxtjs/fontaine',
     '@vueuse/nuxt',
     // 'nuxt-swiper',
     'nuxt-lodash',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt'
+    // '@vite-pwa/nuxt'
   ],
   vite: {
     vue: {},
@@ -35,12 +39,16 @@ export default defineNuxtConfig({
     }
     // plugins: [vue(), eslintPlugin()]
   },
+  tailwindcss: {
+    configPath: '~~/.config/tailwindcss',
+    cssPath: '~/assets/tailwind.css',
+  },
   css: ['~/assets/main.css'],
   postcss: {
     plugins: {
       'postcss-import': {},
+      // tailwindcss: { config: './tailwindcss' },
       'tailwindcss/nesting': 'postcss-nesting',
-      tailwindcss: {},
       // 'postcss-preset-env': {
       //   features: { 'nesting-rules': false },
       // },
@@ -57,6 +65,9 @@ export default defineNuxtConfig({
   //   // prefix: 'Swiper',
   //   // styleLang: 'css',
   //   // modules: ['navigation', 'pagination'], // all modules are imported by default
+  // },
+  // pwa: {
+  //   /* PWA options */
   // },
   nitro: {
     esbuild: {
@@ -82,5 +93,8 @@ export default defineNuxtConfig({
   },
   devServer: {
     // loadingTemplate: false
+  },
+  experimental: {
+    componentIslands: true // false or 'local+remote'
   }
 })

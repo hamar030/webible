@@ -1,9 +1,10 @@
-import type { IBook, IChapter, IPart, IScript, IVerse } from '@/server/database/book'
-export type { IBook, IPart, IScript, IChapter, IVerse }
-
+import { defineStore } from 'pinia'
+import type { IBook, IChapter, IScript } from '@/server/database/book.type'
+// export type { IBook, IPart, IScript, IChapter, IVerse }
+// import { useTrpc() } from '#imports'
 /**
- * using trpc on outside instance
- * @returns $trpc
+ * using useTrpc() on outside instance
+ * @returns $useTrpc()
  */
 const useTrpc = () => {
   return useNuxtApp().$trpc
@@ -61,12 +62,25 @@ export const useBookStore = defineStore('BooksStore', () => {
     return selectedIndex.chapter == 0 && selectedIndex.script == 0 && selectedIndex.part == 0
   })
 
-  // main action
-  async function initialize() {
-    const { data } = await useTrpc().bible.getInit.useQuery(undefined, { queryKey: 'books' })
-    books.value = data.value ?? ([{}] as IBook[])
-    selectBook(books.value[0])
-  }
+  // // main action
+  // const isBookAvailable = async (bookName: string, scriptName: string, chapterId: number) => {
+  //   const data = await useTrpc().bible.isAvailable.query({ bookName, scriptName, chapterId })
+  //   if (data.available) {
+  //     const { books: dBooks, index } = data
+  //     books.value = dBooks
+  //     selectedIndex.book = index.book
+  //     selectedIndex.part = index.part
+  //     selectedIndex.script = index.script
+  //     selectedIndex.chapter = index.chapter
+  //   }
+  //   return data.available
+  // }
+  // todo: push history url
+
+  // const fetchBooks = async()=>{
+  //   const data = useTrpc().bible.getInit.
+  // }
+
   const selectBook = async (book: IBook) => {
     const index = books.value.indexOf(book)
     Promise.all([
@@ -158,7 +172,9 @@ export const useBookStore = defineStore('BooksStore', () => {
   const checkListScripts = async (bookIndex: number) => {
     if (books.value[bookIndex].parts.length === 0) {
       books.value[bookIndex].parts = await useTrpc().bible.script.list.query({
-        bookId: bookIndex + 1
+        index: {
+          book: bookIndex
+        }
       })
       console.debug('downloaded: script-list')
     }
@@ -217,7 +233,7 @@ export const useBookStore = defineStore('BooksStore', () => {
     isNextAvailable,
     isPrevAvailable,
     // Actions
-    initialize,
+    // isBookAvailable,
     selectBook,
     selectScript,
     selectChapter,

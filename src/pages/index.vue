@@ -1,8 +1,3 @@
-<script setup lang="ts">
-import { useRoute } from 'vue-router'
-const route = useRoute()
-</script>
-
 <template>
   <div>
     <h1>Nuxt Routing set up successfully!</h1>
@@ -14,3 +9,7 @@ const route = useRoute()
     >
   </div>
 </template>
+<script setup lang="ts">
+import { useRoute } from 'vue-router'
+const route = useRoute()
+</script>
