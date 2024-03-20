@@ -13,9 +13,9 @@
         </h6>
       </div>
     </header>
-    <main class="flex-1">
-      <div class="mx-auto max-w-7xl p-5 md:px-6 md:py-6 lg:px-8 text-black dark:text-white shadow-lg">
-        <div class="mx-auto min-h-96 md:px-5">
+    <main class="flex-1 shadow-lg">
+      <div class="mx-auto max-w-7xl p-5 md:px-6 md:py-6 lg:px-8 text-black dark:text-white">
+        <div class="mx-auto min-h-96">
           <slot />
         </div>
       </div>

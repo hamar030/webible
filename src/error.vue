@@ -18,14 +18,25 @@
             {{ error?.message }}
           </p>
           <h1>stack:</h1>
-          <p>{{ h(error?.stack ?? 'div') }}</p>
+          <p>{{ error?.stack }}</p>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { useError } from '#app'
-import { h } from 'vue'
-const error = useError()
+<script lang="ts">
+// import { useError } from '#app'
+import type { NuxtError } from '#app'
+// import { h } from 'vue'
+// const error = useError()
+
+export default {
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    error: Object as () => NuxtError
+  },
+  mounted() {
+    this.error
+  }
+}
 </script>

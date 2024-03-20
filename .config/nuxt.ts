@@ -1,7 +1,11 @@
 // import vue from '@vitejs/plugin-vue'
 // import eslintPlugin from 'vite-plugin-eslint'
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// const GITHUB_TOKEN = <string>process.env.GITHUB_TOKEN
+
+/*
+ * https://nuxt.com/docs/api/configuration/nuxt-config
+ */
 export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
@@ -10,12 +14,12 @@ export default defineNuxtConfig({
   srcDir: 'src/',
   ssr: true,
   dir: {
-    public: '~~/public/'
+    // public: '~~/public/'
   },
   routeRules: {
     '/**': { prerender: true },
-    '/bible/**': { prerender: false, isr: 3600 }, //add to isr:true 
-    '/bible-spa/': { prerender: false, ssr: false },
+    '/bible/**': { prerender: false, isr: 60 * 60 * 24 }, //one days
+    '/bible-spa': { prerender: false, ssr: false },
     '/api/**': { cors: true }
   },
   plugins: [],
@@ -41,7 +45,7 @@ export default defineNuxtConfig({
   },
   tailwindcss: {
     configPath: '~~/.config/tailwindcss',
-    cssPath: '~/assets/tailwind.css',
+    cssPath: '~/assets/tailwind.css'
   },
   css: ['~/assets/main.css'],
   postcss: {
@@ -74,12 +78,27 @@ export default defineNuxtConfig({
       options: {
         target: 'esnext'
       }
+    },
+    storage: {
+      // webible_db: {
+      //   driver: 'github',
+      //   // repo: 'gist/3ed4a54ec9f2e8e1721627714193fdcc',
+      //   repo: 'gist/125675978871422e577fe9b3b50570b8',
+      //   dir: '~~/.data/github',
+      //   // ttl: 60 * 60 *24, // one days
+      //   token: GITHUB_TOKEN
+      // }
+      // webible_db:{
+      //   driver: 'netlifyBlobs',
+      //   name: 'webible_db'
+      // }
     }
   },
   build: {
     transpile: ['trpc-nuxt']
   },
   typescript: {
+    builder: 'vite',
     typeCheck: true,
     strict: true
   },

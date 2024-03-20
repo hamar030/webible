@@ -8,10 +8,21 @@ import type { IBooks, IBook, IPart, IScript, IChapter, IVerse, TIndex } from './
 // dotenv.config()
 
 const LIST_BOOK_URL = <string>process.env.LIST_BOOK_URL
+const GITHUB_TOKEN = <string>process.env.GITHUB_TOKEN
+// todo:
+// use cached function
+// and use github api maybe, for faster fetching
 const dataLoad = async (url: string) => {
   if (process.env.NODE_ENV === 'production') {
     console.debug(`fetch from : ${url}`)
-    return await fetch(url)
+    return await fetch(url, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/vnd.github.base64+json',
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    })
       .then((res) => res.blob())
       .then((blb) => blb.text())
       .then((txt) => {
@@ -49,7 +60,7 @@ class Books implements IBooks {
     try {
       if (LIST_BOOK_URL === undefined) throw new Error('Cant get url from .env')
       console.log(`webible-init: fetching data from ${LIST_BOOK_URL}`)
-      console.group()
+      // console.group()
       const list = await dataLoad(LIST_BOOK_URL).then((data) => data.books)
       const books: IBook[] = []
 
@@ -57,7 +68,7 @@ class Books implements IBooks {
         const data = await dataLoad(lst.url)
         books[index] = { id: index + 1, ...lst, ...data }
       }
-      console.groupEnd()
+      // console.groupEnd()
 
       console.log('webible-init: data fetched, next to processing data')
 
@@ -89,8 +100,7 @@ class Books implements IBooks {
       console.groupEnd()
       return new Books(books)
     } catch (error) {
-      console.error('webible-init error: ' + error)
-      // throws(() => error)
+      throw Error('webible-init error: ' + error)
     }
   }
   //get name from url then to index
@@ -174,7 +184,7 @@ class Books implements IBooks {
     return this.list.find((book) => book.id === bookId) ?? null
   }
 
-  public listParts = (index: Pick<TIndex,'book'>): IPart[] => {
+  public listParts = (index: Pick<TIndex, 'book'>): IPart[] => {
     return this.list[index.book].parts.map((part) => ({
       ..._.omit(part, 'scripts'),
       scripts: [] as IScript[]
@@ -186,7 +196,7 @@ class Books implements IBooks {
       chapters: [] as IChapter[]
     }))
   }
-  public listChapters(index: Omit<TIndex,'chapter'>): IChapter[] {
+  public listChapters(index: Omit<TIndex, 'chapter'>): IChapter[] {
     return (
       this.list[index.book].parts[index.part].scripts[index.script].chapters.map((chapter) => ({
         ..._.omit(chapter, 'verses'),
@@ -198,8 +208,8 @@ class Books implements IBooks {
     return this.list[index.book].parts[index.part].scripts[index.script].chapters[index.chapter]
       .verses
   }
-  
-  public listPartsWithScripts(index: Pick<TIndex,'book'>): IPart[] {
+
+  public listPartsWithScripts(index: Pick<TIndex, 'book'>): IPart[] {
     const parts: IPart[] = []
     this.list[index.book].parts.forEach((part, pindex) => {
       parts[pindex] = { ..._.omit(part, 'scripts'), scripts: [] }
@@ -211,7 +221,7 @@ class Books implements IBooks {
   }
 
   // public nextChapter(index: TIndex){
-    
+
   // }
   // public prevChapter(index: TIndex){
 

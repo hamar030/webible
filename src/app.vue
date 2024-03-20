@@ -57,7 +57,7 @@ useHead({
   link: [
     {
       rel: 'icon',
-      type: 'image/png',
+      type: 'image/vnd.microsoft.icon',
       href: appConfig.icon
     }
   ]

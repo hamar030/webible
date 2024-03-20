@@ -56,4 +56,4 @@ coverage
 .netlify
 /netlify/node_modules
 
-/data
+.env.local.*

@@ -1,7 +1,6 @@
 import { router, publicProcedure } from '../trpc'
 // import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-
 export const bibleRouter = router({
   all: publicProcedure.query(({ ctx }) => ctx.books.list),
   list: publicProcedure.query(({ ctx }) => ctx.books.mlist),
