@@ -1,16 +1,17 @@
-[context.production]
+
+[build]
 command = 'nuxi prepare && nuxi build'
 publish = '/dist'
 framework = "nuxt"
 autoLaunch = false
 
-[context.production.environment]
+[build.environment]
 #  ESLINT_USE_FLAT_CONFIG = true
   NODE_VERSION = '20'
   SERVER_PRESET='netlify_edge'
-#  LIST_BOOK_URL='https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list_book.yaml'
+  LIST_BOOK_URL='https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list_book.yaml'
   
-[[context.production.plugins]]
+[[plugins]]
   package = "@netlify/plugin-lighthouse"
   # optional, deploy the lighthouse report to a path under your site
   # [plugins.inputs.audits]
@@ -22,7 +23,7 @@ autoLaunch = false
   autoLaunch = false
   targetPort = 3000
 
-[context.dev.environment]
+[dev.environment]
 #  ESLINT_USE_FLAT_CONFIG = true
   NODE_VERSION = '20'
   SERVER_PRESET= 'netlify_edge'
