@@ -425,7 +425,7 @@
     <div>
       <div class="py-5">
         <hr />
-        <div class="pt-5 text-xs">
+        <div class="pt-5 text-xs hidden">
           Remember: Reading from Torah Scroll or Origin Scripture is more better than this.
         </div>
       </div>
