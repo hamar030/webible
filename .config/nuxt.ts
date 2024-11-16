@@ -7,9 +7,10 @@
  * https://nuxt.com/docs/api/configuration/nuxt-config
  */
 export default defineNuxtConfig({
+  // compatibilityDate: '2024-11-15',
   colorMode: {
     classSuffix: '',
-    storageKey: 'webibleTheme'
+    storageKey: 'webible-theme'
   },
   srcDir: 'src/',
   ssr: true,
@@ -18,24 +19,25 @@ export default defineNuxtConfig({
   },
   routeRules: {
     '/**': { prerender: true },
-    '/bible/**': { prerender: false, isr: 60 * 60 * 24 }, //one days
+    '/bible/**': { prerender: false, isr: 60 * 60 * 24 }, // one days
     '/bible-spa': { prerender: false, ssr: false },
     '/api/**': { cors: true }
   },
   plugins: [],
   modules: [
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/tailwindcss',
-    'nuxt-headlessui',
-    '@nuxtjs/fontaine',
-    '@vueuse/nuxt',
-    // 'nuxt-swiper',
-    'nuxt-lodash',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt'
-    // '@vite-pwa/nuxt'
-  ],
+  // '@nuxtjs/eslint-module',
+  '@nuxt/eslint',
+  '@nuxtjs/color-mode', 
+  '@nuxtjs/tailwindcss', 
+  'nuxt-headlessui', 
+  '@nuxtjs/fontaine', 
+  '@vueuse/nuxt', 
+  // 'nuxt-swiper',
+  'nuxt-lodash', 
+  '@pinia/nuxt', 
+  // '@vite-pwa/nuxt'
+  '@pinia-plugin-persistedstate/nuxt', 
+],
   vite: {
     vue: {},
     build: {
@@ -58,7 +60,10 @@ export default defineNuxtConfig({
       // },
       autoprefixer: {},
       cssnano: {}
-    }
+    },  
+  },    
+  eslint: {
+    // checker: true // <---
   },
   pinia: {
     storesDirs: ['./src/stores/**']
@@ -74,10 +79,16 @@ export default defineNuxtConfig({
   //   /* PWA options */
   // },
   nitro: {
+    minify: true,
+    // autoSubfolderIndex: true,
+    // prerender: {
+    //   // routes: []
+    //   // ignore:["/bible", "/bible-spa"]
+    // },
     esbuild: {
       options: {
         target: 'esnext'
-      }
+      },
     },
     storage: {
       // webible_db: {

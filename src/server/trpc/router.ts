@@ -1,5 +1,6 @@
 import { createCallerFactory, router } from './trpc'
 import { bibleRouter } from './routers/bible'
+// import { z } from 'zod'
 
 export const appRouter = router({
   // hello: publicProcedure
@@ -12,7 +13,7 @@ export const appRouter = router({
   //     return {
   //       greeting: `hello ${input?.text ?? 'world'}`
   //     }
-  //   }),
+  //   })
   bible: bibleRouter
 })
 

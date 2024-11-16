@@ -9,7 +9,7 @@ autoLaunch = false
 #  ESLINT_USE_FLAT_CONFIG = true
   NODE_VERSION = '20'
   SERVER_PRESET='netlify_edge'
-  LIST_BOOK_URL='https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list_book.yaml'
+  # LIST_BOOK_URL='https://gist.githubusercontent.com/hamar030/3ed4a54ec9f2e8e1721627714193fdcc/raw/list_book.yaml'
   
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
@@ -27,7 +27,7 @@ autoLaunch = false
 #  ESLINT_USE_FLAT_CONFIG = true
   NODE_VERSION = '20'
   SERVER_PRESET= 'netlify_edge'
-  LIST_BOOK_URL= '/data/list_book_local.yaml'
+  LIST_BOOK_URL= 'data/list_book_local.yaml'
 
 # The following redirect is intended for use with most SPAs that handle
 # routing internally.

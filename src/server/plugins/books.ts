@@ -1,8 +1,9 @@
 
-import { books } from '../utils/books'
+import { books }  from '../utils/books'
 import { Books } from '../database/book'
 
-export default defineNitroPlugin(async () => {
+
+  export default defineNitroPlugin(async () => {
   console.log('Webible Nitro Plugins')
 
   // console.log(await books.getKeys())
@@ -10,3 +11,4 @@ export default defineNitroPlugin(async () => {
   // first init
   if(books instanceof Books) console.log('ready')
 })
+  

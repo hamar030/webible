@@ -1,4 +1,62 @@
-<div class="loader"></div>
+<div class="loader">
+  <svg
+    version="1.1"
+    id="L4"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    x="0px"
+    y="0px"
+    viewBox="0 0 100 100"
+    enable-background="new 0 0 0 0"
+    xml:space="preserve"
+  >
+    <circle
+      fill="#075985"
+      stroke="none"
+      cx="6"
+      cy="50"
+      r="6"
+    >
+      <animate
+        attributeName="opacity"
+        dur="2s"
+        values="0;1;0"
+        repeatCount="indefinite"
+        begin="0.1"
+      />
+    </circle>
+    <circle
+      fill="#075985"
+      stroke="none"
+      cx="26"
+      cy="50"
+      r="6"
+    >
+      <animate
+        attributeName="opacity"
+        dur="2s"
+        values="0;1;0"
+        repeatCount="indefinite"
+        begin="0.2"
+      />
+    </circle>
+    <circle
+      fill="#075985"
+      stroke="none"
+      cx="46"
+      cy="50"
+      r="6"
+    >
+      <animate
+        attributeName="opacity"
+        dur="2s"
+        values="0;1;0"
+        repeatCount="indefinite"
+        begin="0.3"
+      />
+    </circle>
+  </svg>
+</div>
 <style>
   .loader {
     display: block;
@@ -7,33 +65,11 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 18px;
-    height: 18px;
-    box-sizing: border-box;
-    border: solid 2px transparent;
-    border-top-color: #000;
-    border-left-color: #000;
-    border-bottom-color: #efefef;
-    border-right-color: #efefef;
-    border-radius: 50%;
-    -webkit-animation: loader 400ms linear infinite;
-    animation: loader 400ms linear infinite;
   }
-
-  \@-webkit-keyframes loader {
-    0% {
-      -webkit-transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      -webkit-transform: translate(-50%, -50%) rotate(360deg);
-    }
-  }
-  \@keyframes loader {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
+  svg {
+    width: 100px;
+    height: 100px;
+    margin: 20px;
+    display: inline-block;
   }
 </style>

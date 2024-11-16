@@ -29,9 +29,12 @@
 
 <script lang="ts" setup>
 import { LinkIcon } from '@heroicons/vue/24/outline'
-import { useAppConfig } from '#imports'
+import { useAppConfig, useSeoMeta } from '#imports'
 
 const appConfig = useAppConfig()
+useSeoMeta({
+  title: `WeBible - About`,
+})
 </script>
 <style scoped>
 </style>

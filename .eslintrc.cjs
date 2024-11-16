@@ -33,5 +33,6 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'prettier'
   ],
-  rules: { 'vue/multi-word-component-names': 'off' }
+  rules: { 'vue/multi-word-component-names': 'off' },
+  ignores: { node_modules, dist, }
 }

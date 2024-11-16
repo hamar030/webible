@@ -403,7 +403,17 @@
           :key="verse.id"
         >
           <br v-show="verse.pericope != null && vindex != 0" />
-          <h3 v-show="verse.pericope != null && useConfig.pericope">{{ verse.pericope }}</h3>
+          <h3
+            v-show="verse.pericope != null && useConfig.pericope"
+            :id="verse.pericope ?? ''"
+          >
+            <NuxtLink
+              :to="{ hash: `#${verse.pericope}` }"
+              class="link link-hover"
+            >
+              {{ verse.pericope }}
+            </NuxtLink>
+          </h3>
           <span
             :class="{
               block: !useConfig.verseInline,
@@ -476,7 +486,7 @@ definePageMeta({
 })
 
 useSeoMeta({
-  title: 'Webible - bible',
+  title: `WeBible - Bible`,
   ogType: 'article'
 })
 

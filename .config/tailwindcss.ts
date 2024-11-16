@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss'
+import daisyui from 'daisyui'
 import colors from 'tailwindcss/colors'
 import typography from '@tailwindcss/typography'
 
@@ -28,9 +29,9 @@ export default {
     extend: {
       colors: {
         primary: colors.sky,
-        secondary: colors.teal,
+        secondary: colors.teal
       }
     }
   },
-  plugins: [typography]
+  plugins: [typography, daisyui]
 } satisfies Config

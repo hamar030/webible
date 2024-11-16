@@ -1,6 +1,6 @@
 <template>
   <div class="h-full w-full">
-    <NuxtLoadingIndicator />
+    <NuxtLoadingIndicator color="false" class="bg-blue-700 dark:bg-blue-300 shadow-md"/>
     <NuxtLayout>
       <suspense>
         <NuxtPage />

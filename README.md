@@ -1,39 +1,93 @@
-# webible
-<<<<<<< HEAD
-bible
-=======
+# Webible
 
-This template should help get you started developing with Vue 3 in Vite.
+| Branch | Code Factor | Deploy |
+| ------ | ----------- | ------ |
+| Master | [![CodeFactor](https://www.codefactor.io/repository/github/hamar030/webible/badge)](https://www.codefactor.io/repository/github/hamar030/webible/overview/master) | [![Netlify Status](https://api.netlify.com/api/v1/badges/89a98b29-8a15-4e53-be29-b9a306890c15/deploy-status)](https://app.netlify.com/sites/webible/deploys?branch=master)
+| Develop | [![CodeFactor](https://www.codefactor.io/repository/github/hamar030/webible/badge/develop)](https://www.codefactor.io/repository/github/hamar030/webible/overview/develop) | [![Netlify Status](https://api.netlify.com/api/v1/badges/89a98b29-8a15-4e53-be29-b9a306890c15/deploy-status)](https://app.netlify.com/sites/webible/deploys?branch=develop)
 
-## Recommended IDE Setup
+## Overview
+Simple bible web app using Nuxt 3, and deploy at Netlify.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+See my plan on [Todo](./TODO.md)
 
-## Customize configuration
+Want to Contribute? [Here.](./CONTRIBUTING.md)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## Guides
 
-## Project Setup
+### Nuxt 3 Docs
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-```sh
+### Netlify Docs
+Learn more about netlify deployment at the [Netlify Documentation](https://docs.netlify.com/get-started/)
+
+## Setup
+
+Make sure to install the dependencies:
+
+```bash
+# npm
 npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
 ```
 
-### Compile and Hot-Reload for Development
+## Development Server
 
-```sh
+Start the development server on `http://localhost:3000`:
+
+```bash
+# npm
 npm run dev
+
+# pnpm
+pnpm run dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
 ```
 
-### Compile and Minify for Production
+## Production
 
-```sh
+Build the application for production:
+
+```bash
+# npm
 npm run build
+
+# pnpm
+pnpm run build
+
+# yarn
+yarn build
+
+# bun
+bun run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+Locally preview production build:
 
-```sh
-npm run lint
+```bash
+# npm
+npm run preview
+
+# pnpm
+pnpm run preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
 ```
->>>>>>> 6f1e50d (first commit)
+
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

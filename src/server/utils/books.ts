@@ -1,13 +1,16 @@
 import { Books } from '../database/book'
 // import type { GistSimple } from "./books.type"
 
-const data = async () => {
-  const db = await Books.initialize()
-  return db
-}
+// const data = async () => {
+//   const db = await Books.initialize()
+//   return db
+// }
 // useStorage('webible-db').setItemRaw('books', await data())
-export const books = await data()
+export const books = await Books.initialize()
 
+// export default async function() {
+//   return await Books.initialize()
+// }
 // const GITHUB_TOKEN = <string>process.env.GITHUB_TOKEN
 // export const books = defineCachedFunction(
 //   async () => {

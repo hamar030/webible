@@ -17,9 +17,9 @@
         >
           <component
             :is="
-              $colorMode.preference === 'light'
+              colorMode.preference === 'light'
                 ? SunSolid
-                : $colorMode.preference === 'dark'
+                : colorMode.preference === 'dark'
                   ? MoonIcon
                   : SunIcon
             "

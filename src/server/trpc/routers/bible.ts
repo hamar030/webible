@@ -81,7 +81,6 @@ export const bibleRouter = router({
       })
     })
   })
-
   // for refetching data
   // ToDo: auto fetch on per day
   // reload: publicProcedure.query(({ ctx }) => {

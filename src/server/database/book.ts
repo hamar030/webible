@@ -13,7 +13,7 @@ const GITHUB_TOKEN = <string>process.env.GITHUB_TOKEN
 // use cached function
 // and use github api maybe, for faster fetching
 const dataLoad = async (url: string) => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'development') {
     console.debug(`fetch from : ${url}`)
     return await fetch(url, {
       method: 'GET',
@@ -56,11 +56,11 @@ class Books implements IBooks {
     // todo: yaml schema?
     console.time('webible-init')
     console.group()
-    console.log('webible-init: start')
+    console.log(`webible-init: start (${process.env.NODE_ENV})`)
     try {
-      if (LIST_BOOK_URL === undefined) throw new Error('Cant get url from .env')
-      console.log(`webible-init: fetching data from ${LIST_BOOK_URL}`)
-      // console.group()
+      if (LIST_BOOK_URL === undefined) throw new Error('Error: List Book Not Found')
+      console.log(`webible-init: fetching data`)
+      console.group()
       const list = await dataLoad(LIST_BOOK_URL).then((data) => data.books)
       const books: IBook[] = []
 
@@ -68,7 +68,7 @@ class Books implements IBooks {
         const data = await dataLoad(lst.url)
         books[index] = { id: index + 1, ...lst, ...data }
       }
-      // console.groupEnd()
+      console.groupEnd()
 
       console.log('webible-init: data fetched, next to processing data')
 
@@ -220,12 +220,22 @@ class Books implements IBooks {
     return parts
   }
 
-  // public nextChapter(index: TIndex){
+  public nextChapter(index: TIndex) {
+    if (!(index.part === 0 && index.script === 0 && index.chapter === 0)) {
 
-  // }
-  // public prevChapter(index: TIndex){
-
-  // }
+      return { available: true, link: '' }
+    } else {
+      return { available: false, link: '' }
+    }
+  }
+  public prevChapter(index: TIndex) {
+    if (!(index.part === 0 && index.script === 0 && index.chapter === 0)) {
+      
+      return { available: true, link: '' }
+    } else {
+      return { available: false, link: '' }
+    }
+  }
 }
 
 export { Books }

@@ -3,7 +3,7 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   const { $trpc } = useNuxtApp()
   // const useBooks = useBookStore
-
+  
   const { bookName: tBN, scriptName: tSN, chapterId: tCI } = to.params
   // if (process.server) {
   // console.debug(`book: ${tBN === ''}, script: ${tSN === ''}, chapter: ${tCI === ''}`)
